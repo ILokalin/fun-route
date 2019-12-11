@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import CoordsToString from '../CoordsToString/CoordsToString';
+import IconAdd from '../IconsBtn/IconAdd';
 
 
 export default class extends React.PureComponent {
@@ -10,19 +11,47 @@ export default class extends React.PureComponent {
   }
 
 
+  getInput = el => {
+    this.input = el;
+  }
+
+
+  keyDown (keyPress) {
+    if (keyPress === 'Enter') {
+      this.handleAddPoint();
+    }
+  }
+
+
   handleAddPoint () {
-    this.props.onAddPoint();
+    this.props.onAddPoint(this.input.value);
+    this.input.value = '';
   }
 
 
   render () {
-    const hintString = CoordsToString(this.props.currentCoords);
+    const {placemarkAddress, currentCoords} = this.props;
+    const hintString = CoordsToString(currentCoords);
 
     return (
-      <div className="new-point">
-        <p className="new-point__description">{hintString}</p>
-        <button className="new-point__add-button" type="button" onClick={this.handleAddPoint}>add</button>
-      </div>
-    )
+        <Fragment>
+          <div className="new-point">
+            <h3 className="new-point__caption">Назовите новую точку</h3>
+            <input  className="new-point__input"
+                    title="Добавьте точку в маршрут"
+                    type="text"
+                    ref={this.getInput}
+                    name="address"
+                    autoComplete="off"
+                    onKeyDown={(e) => this.keyDown(e.key)}
+                    placeholder={placemarkAddress}
+                    />
+            <button className="new-point__add-button" type="button" onClick={this.handleAddPoint}>
+              <IconAdd />
+            </button>
+            <p className="new-point__description">{hintString}</p>
+          </div>
+        </Fragment>
+      );
   }
 }

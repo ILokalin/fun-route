@@ -1,16 +1,6 @@
-@import './components/Map/Map';
+@import './components/Styles/Styles.scss';
 @import './App';
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+@import './components/Map/Map';
+@import './components/NewPoint/NewPoint.scss';
+@import './components/RoutePoint/RoutePoint.scss';
+@import './components/RouteTypeButton/RouteTypeButton.scss';
