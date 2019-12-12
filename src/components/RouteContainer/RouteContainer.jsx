@@ -18,10 +18,15 @@ export default class extends React.PureComponent {
 
     if (typeof(button) !== 'undefined' && button) {
       if (button.value === 'up') {
-        this.props.onUpPoint(itemIndex)
+        const position = this.positionIdInRoute(itemIndex);
+        const newIndex = (position === 0) ? document.querySelectorAll('.route__item').length -1 : position - 1;
+        this.props.onChangeSequence(newIndex, itemIndex);
 
       } else if (button.value === 'down') {
-        this.props.onDownPoint(itemIndex)
+        const position = this.positionIdInRoute(itemIndex);
+        const newIndex = (position === document.querySelectorAll('.route__item').length -1) ? 0 : position + 1;
+        debugger
+        this.props.onChangeSequence(newIndex, itemIndex);
 
       } else if (button.value === 'remove') {
         this.props.onDeletePoint(itemIndex)
@@ -49,9 +54,15 @@ export default class extends React.PureComponent {
   }
 
 
+  positionIdInRoute (id) {
+    const itemsList = [...document.querySelector('.route').children]
+    return itemsList.findIndex(element => element.dataset.index === id);
+  }
+
   newIndexReady (id) {
-    const newItemsList = [...document.querySelector('.route').children]
-    const newIndex = newItemsList.findIndex(element => element.dataset.index === id);
+    const newIndex = this.positionIdInRoute(id)
+    // const newItemsList = [...document.querySelector('.route').children]
+    // const newIndex = newItemsList.findIndex(element => element.dataset.index === id);
 
     this.props.onChangeSequence(newIndex, id);
   }
@@ -64,7 +75,7 @@ export default class extends React.PureComponent {
       <ul className="route" onClick ={this.hendlePoint}>
         {routePoints.map((point, index) =>  <RoutePoint   
                                               point = {point}
-                                              key   = {point.id} 
+                                              key   = {point.geometry.id} 
                                               pointLetter   = {index < 10 ? String.fromCharCode(index + 65) : ''}
                                               newIndexFind  = {this.newIndexReady}
                                               />)}

@@ -31,7 +31,7 @@ export default class extends React.PureComponent {
 
   render () {
     const {placemarkAddress, currentCoords} = this.props;
-    const hintString = CoordsToString(currentCoords);
+    const hintString = `координаты: ${CoordsToString(currentCoords)}`;
 
     return (
         <Fragment>

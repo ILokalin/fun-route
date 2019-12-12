@@ -8,19 +8,23 @@ import RouteTypeButton from '../RouteTypeButton/RouteTypeButton';
 export default class extends React.Component {
   constructor (props) {
     super(props);
-
+    
     this.handleLoad = this.handleLoad.bind(this);
     this.createPlacemark = this.createPlacemark.bind(this);
+    this.howRouteShow = this.howRouteShow.bind(this);
     this.onAddPoint = this.onAddPoint.bind(this);
     this.onDeletePoint = this.onDeletePoint.bind(this);
-    this.loadPolyline = this.loadPolyline.bind(this);
+    this.onChangeSequence = this.onChangeSequence.bind(this);
+    this.onViewPoint = this.onViewPoint.bind(this);
+    this.onChangeRoutType = this.onChangeRoutType.bind(this);
   }
 
 
   state = {
     routePoints: [],
     currentPoint: {},
-    ready: false
+    ready: false,
+    routeType: 'polyline'
   }
 
 
@@ -168,20 +172,23 @@ export default class extends React.Component {
         cursor: 'pointer'
       });
     
-    newPoint.id = this.generateUniqueKey(balloonContent);
-    newPoint.geometry.num = numOfPoint;
+    newPoint.geometry.id = this.generateUniqueKey(balloonContent);
     newPoint.name = nameOfPoint;
 
     newPoint.geometry.events.add('change', (event) => {
       const newCoords = event.get('newCoordinates');
+      const pointOfEvent = event.get('target');
 
-      this.funPolyline.geometry.set(event.originalEvent.target.num, newCoords);
+      const index = this.state.routePoints.findIndex(point => point.geometry.id === pointOfEvent.id)
+      this.funPolyline.geometry.set(index, newCoords);
     })
 
     newPoint.events.add('dragend', async (event) => {
-      const pointOfEvent = event.originalEvent.target.geometry.num;
-      const pointCoords = this.state.routePoints[pointOfEvent].geometry.getCoordinates();
-      const tempPoint = Object.create(this.state.routePoints[pointOfEvent]);
+      const pointOfEvent = event.originalEvent.target.geometry;
+      const index = this.state.routePoints.findIndex(point => point.geometry.id === pointOfEvent.id)
+
+      const pointCoords = this.state.routePoints[index].geometry.getCoordinates();
+      const tempPoint = Object.create(this.state.routePoints[index]);
 
       await window.ymaps.geocode(pointCoords)
         .then (function (res) {
@@ -201,7 +208,7 @@ export default class extends React.Component {
 
       this.setState(
         state => ({
-          routePoints: state.routePoints.slice(0, pointOfEvent ).concat(tempPoint).concat(state.routePoints.slice(pointOfEvent + 1))
+          routePoints: state.routePoints.slice(0, index ).concat(tempPoint).concat(state.routePoints.slice(index + 1))
         })
       );
     })
@@ -217,18 +224,47 @@ export default class extends React.Component {
     this.currentPositionCollection.remove(this.state.currentPoint);
     this.createPlacemark(coords);
 
-    this.loadPolyline();
+    this.howRouteShow();
   }
 
 
-  loadPolyline () {
-    const pointsForLine = this.state.routePoints.map(point => point.geometry.getCoordinates());
-    this.funPolyline.geometry.setCoordinates(pointsForLine);
+  howRouteShow () {
+    if (this.state.routeType === 'polyline') {
+      const pointsForLine = this.state.routePoints.map(point => point.geometry.getCoordinates());
+
+      this.funPolyline.geometry.setCoordinates(pointsForLine);
+      this.funPolyline.options.set('visible', true);
+      this.routeCollection.options.set('visible', true);
+
+      this.multiRout && this.funMap.geoObjects.remove(this.multiRout);
+      this.multiRout = null;
+
+    } else {
+      this.funPolyline.options.set('visible', false);
+      this.routeCollection.options.set('visible', false);
+
+      if (this.multiRout === 'undefined' || !this.multiRout)  {
+          this.multiRout = new window.ymaps.multiRouter.MultiRoute({
+            referencePoints: this.state.routePoints.map(point => point.geometry.getCoordinates()),
+            params: {
+              results: 2
+            }
+          }, {
+            boundsAutoApply: true
+          })
+          this.funMap.geoObjects.add(this.multiRout);
+
+        } else {
+          this.multiRout.model.setReferencePoints(this.state.routePoints.map(point => point.geometry.getCoordinates()));
+
+        }
+      debugger
+    }
   }
 
 
   async onDeletePoint (id) {
-    const index = this.state.routePoints.findIndex(point => point.id === id)
+    const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
 
     if (index > -1) {
       this.routeCollection.removeAll();
@@ -244,13 +280,72 @@ export default class extends React.Component {
             .set({
               iconContent: i < 10 ? String.fromCharCode(i + 65) : ''
             });
+        placemark.geometry.num = i;
         this.routeCollection.add(placemark);
       });
-      this.loadPolyline();
-    }
 
+      this.howRouteShow();
+    }
   }
 
+
+  async onChangeSequence (newIndex, id) {
+    const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
+
+    if (index > -1) {
+      this.routeCollection.removeAll();
+
+      if (newIndex > index) {
+        await this.setState(
+          state => ({
+            routePoints: state.routePoints.slice(0, index).concat(state.routePoints.slice(index+1, newIndex+1)).concat(state.routePoints[index]).concat(state.routePoints.slice(newIndex+1))
+          })
+        )
+      } else if (newIndex < index) {
+        await this.setState(
+          state => ({
+            routePoints: state.routePoints.slice(0, newIndex).concat(state.routePoints[index]).concat(state.routePoints.slice(newIndex, index)).concat(state.routePoints.slice(index+1))
+          })
+        )
+      }
+
+      this.state.routePoints.forEach((placemark, i) => {
+        placemark.properties
+            .set({
+              iconContent: i < 10 ? String.fromCharCode(i + 65) : ''
+            });
+        placemark.geometry.num = i;
+        this.routeCollection.add(placemark);
+      });
+
+      this.howRouteShow();
+    }
+  }
+
+
+  onViewPoint (id) {
+    const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
+
+    this.funMap.panTo(
+            this.state.routePoints[index].geometry.getCoordinates(), {
+              flying: true,
+            }
+          );
+  }
+
+
+  async onChangeRoutType (routeState) {
+    const {value} = routeState;
+    const routeType = value ? 'multiRout' : 'polyline';
+
+    await this.setState(
+      state => ({
+        routeType: routeType
+      })
+    )
+
+    this.howRouteShow();
+  }
 
   render () {
     let currentCoords = [0,0],
@@ -278,22 +373,21 @@ export default class extends React.Component {
 
           <div className="main__route">
             <RouteContainer
-              routePoints = { this.state.routePoints }
+              routePoints   = { this.state.routePoints }
               onDeletePoint = { this.onDeletePoint }
+              onViewPoint   = { this.onViewPoint }
+              onChangeSequence = { this.onChangeSequence }
               />
           </div>
 
           <div className="main__type-button">
-            <RouteTypeButton />
+            <RouteTypeButton
+              onChangeRoutType = { this.onChangeRoutType } 
+              />
           </div>
         </main>
-        
-        
-        
+
       </Fragment>
-      
     )
-
   }
-
 }

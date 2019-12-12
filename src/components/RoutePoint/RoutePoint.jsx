@@ -103,10 +103,12 @@ export default class extends React.PureComponent {
 
 
   render () {
-    const {id, name} = this.props.point,
-          address = this.props.point.properties.get('balloonContent'),
-          coords = this.props.point.geometry.getCoordinates(),
-          elementHint = `координаты: ${CoordsToString(coords)}`;
+    const point = this.props.point,
+          name  = point.name,
+          id    = point.geometry.id,
+          address = point.properties.get('balloonContent'),
+          coords  = point.geometry.getCoordinates(),
+          coordsHint = `координаты: ${CoordsToString(coords)}`;
    
 
     return (
@@ -120,7 +122,7 @@ export default class extends React.PureComponent {
             <IconDown/>
           </button>
         </div>
-        <div className="route__item-caption"  title={ elementHint }>
+        <div className="route__item-caption"  title={ coordsHint }>
           <h3 className="route__item-address">{ address }</h3>
           <p  className="route__item-name">{ name }</p>
         </div>
