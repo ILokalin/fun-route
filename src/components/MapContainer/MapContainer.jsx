@@ -12,6 +12,7 @@ export default class extends React.PureComponent {
     this.routeType = 'polyline';
     
     this.handleLoad = this.handleLoad.bind(this);
+    this.createFunBalloonLayout = this.createFunBalloonLayout.bind(this);
     this.createPlacemark = this.createPlacemark.bind(this);
     this.howRouteShow = this.howRouteShow.bind(this);
     this.onAddPoint = this.onAddPoint.bind(this);
@@ -58,7 +59,8 @@ export default class extends React.PureComponent {
 
       this.funMap.geoObjects.add(this.routeCollection);
       this.funMap.geoObjects.add(this.currentPositionCollection);
-
+      
+      this.createFunBalloonLayout();
       this.createPlacemark();
 
       window.ymaps.geolocation.get({
@@ -104,6 +106,114 @@ export default class extends React.PureComponent {
     })
   }
 
+  createFunBalloonLayout () {
+    this.MyBalloonLayout = window.ymaps.templateLayoutFactory.createClass(
+        '<div class="popover top styledPlacemark">' +
+          '<a class="close" href="#">&times;</a>' +
+          '<div class="arrow"></div>' +
+          '<div class="popover-inner">' +
+            '$[[options.contentLayout observeSize minWidth=235 maxWidth=235 maxHeight=350]]' +
+          '</div>' +
+        '</div>', {
+
+        /**
+         * Строит экземпляр макета на основе шаблона и добавляет его в родительский HTML-элемент.
+         * @function
+         * @name build
+         */
+        build: function () {
+          this.constructor.superclass.build.call(this);
+
+          this._element = document.querySelector('.popover');
+          this.applyElementOffset();
+
+          this._element.querySelector('.close').addEventListener('click', this.onCloseClick.bind(this))
+        },
+
+        /**
+         * Удаляет содержимое макета из DOM.
+         * @function
+         * @name clear
+         */
+        clear: function () {
+          this._element.querySelector('.close').removeEventListener('click', this.onCloseClick.bind(this))
+
+          this.constructor.superclass.clear.call(this);
+        },
+
+        /**
+         * Метод будет вызван системой шаблонов АПИ при изменении размеров вложенного макета.
+         * @function
+         * @name onSublayoutSizeChange
+         */
+        onSublayoutSizeChange: function () {
+          this.constructor.superclass.onSublayoutSizeChange.apply(this, arguments);
+
+          if (!this._isElement(this._element)) {
+              return;
+          }
+
+          this.applyElementOffset()
+          this.events.fire('shapechange');
+        },
+          
+        /**
+         * Сдвигаем балун, чтобы "хвостик" указывал на точку привязки.
+         * @function
+         * @name applyElementOffset
+         */
+        applyElementOffset: function () {
+          debugger
+            this._element.style.left = `${-(this._element.offsetWidth / 2)}px`;
+            this._element.style.top = `${-(this._element.offsetHeight + this._element.querySelector('.arrow').offsetHeight)}px`;
+            
+        },
+
+        onCloseClick: function (event) {
+          // this.constructor.superclass.onCloseClick.apply(this, arguments);
+          debugger
+          event.preventDefault();
+
+          this.events.fire('userclose');
+        },
+
+        /**
+         * Используется для автопозиционирования (balloonAutoPan).
+         * @function
+         * @name getClientBounds
+         * @returns {Number[][]} Координаты левого верхнего и правого нижнего углов шаблона относительно точки привязки.
+         */
+        getShape: function () {
+          if(!this._isElement(this._element)) {
+              return this.constructor.superclass.getShape.call(this);
+          }
+          debugger
+          var position = {
+            top: parseInt(this._element.style.top),
+            left: parseInt(this._element.style.top)
+          }
+            
+
+          return new window.ymaps.shape.Rectangle(new window.ymaps.geometry.pixel.Rectangle([
+              [position.left, position.top], [
+                  position.left + this._element.offsetWidth,
+                  position.top + this._element.offsetHeight + this._element.querySelector('.arrow').offsetHeight
+              ]
+          ]));
+        },
+
+        _isElement: function (element) {
+                  return element && element.querySelector('.arrow');
+        }
+        }
+      );
+
+    this.MyBalloonContentLayout = window.ymaps.templateLayoutFactory.createClass(
+      '<h3 class="popover__title">$[properties.balloonHeader]</h3>' +
+      '<div class="popover__content">$[properties.balloonContent]</div>'
+      );
+  }
+  
 
   /**
    * Саздание текущей метки для выделения точки на карте
@@ -112,48 +222,10 @@ export default class extends React.PureComponent {
    * @param [lat,long] координаты точки (ширина, долгота)
    */
   createPlacemark (createCoords = this.funMap.getCenter()) {
-    // const MyBalloonLayout = window.ymaps.templateLayoutFactory.createClass(
-    //     '<div class="popover top styledPlacemark">' +
-    //       '<a class="close" href="#">&times;</a>' +
-    //       '<div class="arrow"></div>' +
-    //       '<div class="popover-inner">' +
-    //         '$[[options.contentLayout observeSize minWidth=235 maxWidth=235 maxHeight=350]]' +
-    //       '</div>' +
-    //     '</div>', {
-
-    //       build: function () {
-    //         this.constructor.superclass.build.call(this);
-    //         const parentElement = document.querySelector('.popover').getParentElement();
-    //         this._element()
-
-    //         this.applyElementOffset(parentElement);
-
-    //         this.document.querySelector('.cose').addEventListener('click', (event) => {
-    //           this.onCloseClick(event);
-    //         })
-    //       },
-
-    //       onCloseClick: function (e) {
-    //                 e.preventDefault();
-
-    //                 this.events.fire('userclose');
-    //       },
-
-    //       _isElement: function (element) {
-    //                 return element && element[0] && element.find('.arrow')[0];
-    //       }
-    //     }
-    //   );
-
-    // const MyBalloonContentLayout = window.ymaps.templateLayoutFactory.createClass(
-    //         '<h3 class="popover-title">$[properties.balloonHeader]</h3>' +
-    //             '<div class="popover-content">$[properties.balloonContent]</div>'
-    //     );
-
     const currentPoint = new window.ymaps.Placemark (
       createCoords,
       {
-
+        balloonHeader: 'Расположение'
       },{
         preset: 'islands#icon',
         iconColor: '#16A085',
@@ -161,10 +233,10 @@ export default class extends React.PureComponent {
         cursor: 'pointer',
         zIndex: 1000,
 
-        // balloonShadow: false,
-        // balloonLayout: MyBalloonLayout,
-        // balloonContentLayout: MyBalloonContentLayout,
-        // balloonPanelMaxMapArea: 0
+        balloonShadow: false,
+        balloonLayout: this.MyBalloonLayout,
+        balloonContentLayout: this.MyBalloonContentLayout,
+        balloonPanelMaxMapArea: 0
       }
     );
 
@@ -249,13 +321,19 @@ export default class extends React.PureComponent {
     const newPoint = new window.ymaps.Placemark (
        coords,
       {
+        balloonHeader: 'Расположение',
         balloonContent: balloonContent,
         iconContent: numOfPoint < 10 ? String.fromCharCode(numOfPoint + 65) : ''
       },{
         preset: 'islands#circleIcon',
         iconColor: '#34495E',
         draggable: true,
-        cursor: 'pointer'
+        cursor: 'pointer',
+
+        balloonShadow: false,
+        balloonLayout: this.MyBalloonLayout,
+        balloonContentLayout: this.MyBalloonContentLayout,
+        balloonPanelMaxMapArea: 0
       });
     
     newPoint.geometry.id = this.generateUniqueKey(balloonContent);

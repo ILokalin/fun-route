@@ -3,18 +3,91 @@
   top: 0;
   left: 0;
   z-index: 1010;
-  display: none;
   max-width: 276px;
   padding: 1px;
   text-align: left;
   white-space: normal;
   background-color: #fff;
-  border: 1px solid $LightElement-color;
-  border-radius: 4px;
+  border: 1px solid rgba(120,120,80,0.3);
+  border-radius: 6px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.2);
   background-clip: padding-box;
+
+  &__title {
+    padding: 8px 14px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 18px;
+    color: $ContainerBg-color;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ebebeb;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+  }
+
+  &__content {
+    padding: 9px 14px;
+  }
 }
 
 .popover.top {
   margin-top: -10px;
+}
+
+.popover.top .arrow {
+  bottom: -11px;
+  left: 50%;
+  margin-left: -3px;
+  border-top-color: #999;
+  border-top-color: rgba(120,120,80,0.3);
+  border-bottom-width: 0;
+}
+
+.popover.top .arrow::after {
+  bottom: 1px;
+  margin-left: -10px;
+  border-top-color: #fff;
+  border-bottom-width: 0;
+}
+
+.popover .arrow::after {
+  border-width: 10px;
+  content: "";
+}
+
+.arrow {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+
+  &::after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+}
+
+.popover .close {
+  position: absolute;
+  right: 5px;
+  top: 1px;
+}
+
+.close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .2;
+  text-decoration: none;
 }
