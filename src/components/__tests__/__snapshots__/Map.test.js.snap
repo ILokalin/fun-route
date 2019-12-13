@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Map Component render snap 1`] = `
+<div
+  className="map-region"
+>
+  <div
+    className="map-region__map map-region__map--hidden"
+    id="map"
+  />
+  <span
+    className="map-region__preloader"
+  >
+    <div
+      className="object"
+      id="object_one"
+    />
+    <div
+      className="object"
+      id="object_two"
+    />
+    <div
+      className="object"
+      id="object_three"
+    />
+    <div
+      className="object"
+      id="object_four"
+    />
+  </span>
+</div>
+`;

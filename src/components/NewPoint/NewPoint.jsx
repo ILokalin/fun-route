@@ -15,7 +15,7 @@ export default class extends React.PureComponent {
     this.input = el;
   }
 
-
+  
   keyDown (keyPress) {
     if (keyPress === 'Enter') {
       this.handleAddPoint();

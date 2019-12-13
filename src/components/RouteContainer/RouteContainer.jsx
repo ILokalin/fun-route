@@ -6,11 +6,21 @@ export default class extends React.PureComponent {
   constructor (props) {
     super(props);
 
-    this.hendlePoint = this.hendlePoint.bind(this);
+    this.handlePoint = this.handlePoint.bind(this);
     this.newIndexReady = this.newIndexReady.bind(this);
   }
 
-  hendlePoint (event) {
+
+  /**
+   * Управление событиями на точке маршрута:
+   * - нажатие кнопок "вверх"/"вниз"
+   * - нажатие кнопки "удалить"
+   * - нажатие на элемент для раскрытия подробного содержания и показа точки в центер карты
+   * @function
+   * @name handlePoint
+   * @params {object.event} event - событие
+   */
+  handlePoint (event) {
     const target = event.target;    
     const itemIndex = target.closest('.route__item') ? target.closest('.route__item').dataset.index : ''
 
@@ -54,15 +64,26 @@ export default class extends React.PureComponent {
   }
 
 
+  /**
+   * Поиск позиции в спике маршрута по id
+   * Применяется для смены последовательсности точек
+   * @function
+   * @name positionIdInRoute
+   * @params {string} id - уникальный идентификатор
+   * @return {number} - текущий индекс элемента в списке маршрута
+   */
   positionIdInRoute (id) {
     const itemsList = [...document.querySelector('.route').children]
     return itemsList.findIndex(element => element.dataset.index === id);
   }
 
+
+  /**
+   * После перемещения точки в маршруте, при готовности нового индекса, 
+   * вызов запроса на смену последовательности в соновном наборе данных
+   */
   newIndexReady (id) {
     const newIndex = this.positionIdInRoute(id)
-    // const newItemsList = [...document.querySelector('.route').children]
-    // const newIndex = newItemsList.findIndex(element => element.dataset.index === id);
 
     this.props.onChangeSequence(newIndex, id);
   }
@@ -70,9 +91,9 @@ export default class extends React.PureComponent {
 
   render() {
     const {routePoints} = this.props;
-    
+
     return (
-      <ul className="route" onClick ={this.hendlePoint}>
+      <ul className="route" onClick ={this.handlePoint}>
         {routePoints.map((point, index) =>  <RoutePoint   
                                               point = {point}
                                               key   = {point.geometry.id} 

@@ -5,9 +5,11 @@ import RouteContainer from '../RouteContainer/RouteContainer';
 import RouteTypeButton from '../RouteTypeButton/RouteTypeButton';
 
 
-export default class extends React.Component {
+export default class extends React.PureComponent {
   constructor (props) {
     super(props);
+
+    this.routeType = 'polyline';
     
     this.handleLoad = this.handleLoad.bind(this);
     this.createPlacemark = this.createPlacemark.bind(this);
@@ -24,7 +26,6 @@ export default class extends React.Component {
     routePoints: [],
     currentPoint: {},
     ready: false,
-    routeType: 'polyline'
   }
 
 
@@ -32,6 +33,15 @@ export default class extends React.Component {
     window.addEventListener ('load', this.handleLoad);
   }
 
+  /**
+   * Инициализация яндекс-карты после полной ее загрузки
+   * Чтение геолокации и позиционирование карты
+   * Создание коллекция для меток:
+   * routeCollection - для меток маршрута;
+   * currentPositionCollection - для текущей метки;
+   * @function
+   * @name handleLoad
+   */
   handleLoad () {
     const _this = this;
 
@@ -70,6 +80,8 @@ export default class extends React.Component {
 
           _this.funMap.setZoom(12);
           _this.state.currentPoint.setCoord(newCoords);
+
+          document.querySelector('.map-region__map').classList.remove('map-region__map--hidden');
         })
 
         this.funMap.events.add('click', (event) => {
@@ -81,8 +93,8 @@ export default class extends React.Component {
         this.funPolyline = new window.ymaps.Polyline(
           [],
           {}, {
-            strokeColor: '#113040a0',
-            strokeWidth: 4,
+            strokeColor: ['#000000','#16A085'],
+            strokeWidth: [6,4],
             editorMaxPoints: 0
           })
         
@@ -93,14 +105,66 @@ export default class extends React.Component {
   }
 
 
+  /**
+   * Саздание текущей метки для выделения точки на карте
+   * @function
+   * @name createPlacemark
+   * @param [lat,long] координаты точки (ширина, долгота)
+   */
   createPlacemark (createCoords = this.funMap.getCenter()) {
+    // const MyBalloonLayout = window.ymaps.templateLayoutFactory.createClass(
+    //     '<div class="popover top styledPlacemark">' +
+    //       '<a class="close" href="#">&times;</a>' +
+    //       '<div class="arrow"></div>' +
+    //       '<div class="popover-inner">' +
+    //         '$[[options.contentLayout observeSize minWidth=235 maxWidth=235 maxHeight=350]]' +
+    //       '</div>' +
+    //     '</div>', {
+
+    //       build: function () {
+    //         this.constructor.superclass.build.call(this);
+    //         const parentElement = document.querySelector('.popover').getParentElement();
+    //         this._element()
+
+    //         this.applyElementOffset(parentElement);
+
+    //         this.document.querySelector('.cose').addEventListener('click', (event) => {
+    //           this.onCloseClick(event);
+    //         })
+    //       },
+
+    //       onCloseClick: function (e) {
+    //                 e.preventDefault();
+
+    //                 this.events.fire('userclose');
+    //       },
+
+    //       _isElement: function (element) {
+    //                 return element && element[0] && element.find('.arrow')[0];
+    //       }
+    //     }
+    //   );
+
+    // const MyBalloonContentLayout = window.ymaps.templateLayoutFactory.createClass(
+    //         '<h3 class="popover-title">$[properties.balloonHeader]</h3>' +
+    //             '<div class="popover-content">$[properties.balloonContent]</div>'
+    //     );
+
     const currentPoint = new window.ymaps.Placemark (
       createCoords,
-      {},{
+      {
+
+      },{
         preset: 'islands#icon',
         iconColor: '#16A085',
         draggable: true,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        zIndex: 1000,
+
+        // balloonShadow: false,
+        // balloonLayout: MyBalloonLayout,
+        // balloonContentLayout: MyBalloonContentLayout,
+        // balloonPanelMaxMapArea: 0
       }
     );
 
@@ -109,11 +173,20 @@ export default class extends React.Component {
             ready: true
           }));
 
+    /**
+     * Метод для установки новых координат и изменения состояния маркера
+     * @param [lat,long] координаты точки (ширина, долгота)
+     */
     currentPoint.setCoord = async (coords) => {
       const newPlacemark = Object.create(this.state.currentPoint);
 
       newPlacemark.geometry.setCoordinates(coords);
 
+      /**
+       * Адрес необходимо загрузить в метку до изменения метки в state
+       * Смена адреса и координат инициируют ренедер модуля NewPoint
+       * Ожидание загрузки адреса
+       */
       await window.ymaps.geocode(coords)
         .then (function (res) {
           const firstGeoObject = res.geoObjects.get(0);
@@ -123,8 +196,6 @@ export default class extends React.Component {
             firstGeoObject.getThoroughfare() || firstGeoObject.getPremise(),
             firstGeoObject.getPremiseNumber()
             ].filter(Boolean).join(',').split(',').join(', ');
-
-          // const addressPointBalloon = firstGeoObject.getAddressLine();
 
           newPlacemark.properties
             .set({
@@ -149,12 +220,27 @@ export default class extends React.Component {
   }
 
   
+  /**
+   * Генерация уникального ключа на основании текущего времени и адреса метки
+   * @function
+   * @name generateUniqueKey
+   * @params {string} [pre] адрес метки
+   * @return {string} уникальный ключ
+   */
   generateUniqueKey (pre) {
 
     return `${ pre }_${ new Date().getTime() }`;
   };
 
 
+  /**
+   * Добавление точки в маршрут
+   * Точка добавляется в массив:    this.state.routePoints
+   * Точка добавляется в коллекцию: this.routeCollection
+   * @function
+   * @name onAddPoint
+   * @params {string} [nameOfPoint] название точки точки
+   */
   async onAddPoint (nameOfPoint) {
     const coords = this.state.currentPoint.geometry.getCoordinates();
     const balloonContent = this.state.currentPoint.properties.get('balloonContent');
@@ -166,7 +252,7 @@ export default class extends React.Component {
         balloonContent: balloonContent,
         iconContent: numOfPoint < 10 ? String.fromCharCode(numOfPoint + 65) : ''
       },{
-        preset: 'islands#icon',
+        preset: 'islands#circleIcon',
         iconColor: '#34495E',
         draggable: true,
         cursor: 'pointer'
@@ -175,6 +261,11 @@ export default class extends React.Component {
     newPoint.geometry.id = this.generateUniqueKey(balloonContent);
     newPoint.name = nameOfPoint;
 
+    /**
+     * Смена координат (перенос метки на карте) вызывает смену координат в ломаной
+     * индекс метки читается для определеня порядкового номера точки в маршруте
+     * Во время перемещения точки нет необходимости изменять state
+     */
     newPoint.geometry.events.add('change', (event) => {
       const newCoords = event.get('newCoordinates');
       const pointOfEvent = event.get('target');
@@ -183,6 +274,11 @@ export default class extends React.Component {
       this.funPolyline.geometry.set(index, newCoords);
     })
 
+    /**
+     * По окончанию перемещения точки необходимо получить новый адрес
+     * Необходимо зафиксировать изменение state для routePoints
+     * Изменения вызывают замену соответствующего пункта RouteContainer -> RoutePoint
+     */
     newPoint.events.add('dragend', async (event) => {
       const pointOfEvent = event.originalEvent.target.geometry;
       const index = this.state.routePoints.findIndex(point => point.geometry.id === pointOfEvent.id)
@@ -190,6 +286,10 @@ export default class extends React.Component {
       const pointCoords = this.state.routePoints[index].geometry.getCoordinates();
       const tempPoint = Object.create(this.state.routePoints[index]);
 
+      /**
+       * Адрес необходимо загрузить в метку до изменения метки в state
+       * Ожидание загрузки адреса
+       */
       await window.ymaps.geocode(pointCoords)
         .then (function (res) {
           const firstGeoObject = res.geoObjects.get(0);
@@ -215,21 +315,31 @@ export default class extends React.Component {
 
     this.routeCollection.add(newPoint);
 
+    /**
+     * Необходимо дождаться выполнения записи новой точки в this.state.routePoints
+     * Чтобы при загрузке маршрута ее координаты были в наличии
+     */
     await this.setState(
       state => ({
         routePoints: [...state.routePoints, newPoint]
       })
     );
 
-    this.currentPositionCollection.remove(this.state.currentPoint);
-    this.createPlacemark(coords);
-
     this.howRouteShow();
   }
 
 
+  /**
+   * Как показать маршрут - ломаная линия или мультимаршурт для движения
+   * Читает this.routeType ('polyline' || 'multiRoute')
+   * При показе мультимаршрута у ломаной убирается видимость и линия не удаляется с карты
+   * Так же, скрывается коллекция меток - у мультимаршурта создаются свои метки
+   * При показе ломаной линии, мультимаршурт удаляеться с карты
+   * @function
+   * @name howRouteShow
+   */
   howRouteShow () {
-    if (this.state.routeType === 'polyline') {
+    if (this.routeType === 'polyline') {
       const pointsForLine = this.state.routePoints.map(point => point.geometry.getCoordinates());
 
       this.funPolyline.geometry.setCoordinates(pointsForLine);
@@ -258,24 +368,27 @@ export default class extends React.Component {
           this.multiRout.model.setReferencePoints(this.state.routePoints.map(point => point.geometry.getCoordinates()));
 
         }
-      debugger
     }
   }
 
 
+  /**
+   * Удаление точки из маршрута.
+   * Удаление просиходит через полную очистку коллекции this.routeCollection
+   * и загрузку оставшихся меток. После этого вызывается howRouteShow для перезагрузки видимой части маршрута
+   * @function
+   * @name onDeletePoint
+   * @params {string} [id] - уникальный идентификатор метки в маршруте
+   */
   async onDeletePoint (id) {
     const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
 
     if (index > -1) {
       this.routeCollection.removeAll();
 
-      await this.setState(
-        state => ({
-          routePoints: state.routePoints.slice(0, index).concat(state.routePoints.slice(index + 1))
-        })
-      )
+      const newRoute = this.state.routePoints.slice(0, index).concat(this.state.routePoints.slice(index + 1));
 
-      this.state.routePoints.forEach((placemark, i) => {
+      newRoute.forEach((placemark, i) => {
         placemark.properties
             .set({
               iconContent: i < 10 ? String.fromCharCode(i + 65) : ''
@@ -284,32 +397,43 @@ export default class extends React.Component {
         this.routeCollection.add(placemark);
       });
 
+      // Необходимо дождаться записи state.routePoints перед показом маршрута
+      await this.setState(
+        state => ({
+          routePoints: newRoute
+        })
+      )
+
       this.howRouteShow();
     }
   }
 
 
+  /**
+   * Изменение позиции в маршруте у метки с указанным id
+   * Вызывается как при перетаскивании элементов, так и нажатии кнопок "вверх"/"вниз"
+   * Старое местоположение определяется уникальным id, новое передается функционалом события из RouteContainer
+   * @function
+   * @name onChangeSequence
+   * @params {number} newIndex - новое положение в маршруте
+   * @params {string} id - уникальный идентификатор элемента
+   */
   async onChangeSequence (newIndex, id) {
     const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
 
     if (index > -1) {
+      let newRoute = [];
       this.routeCollection.removeAll();
-
+      
       if (newIndex > index) {
-        await this.setState(
-          state => ({
-            routePoints: state.routePoints.slice(0, index).concat(state.routePoints.slice(index+1, newIndex+1)).concat(state.routePoints[index]).concat(state.routePoints.slice(newIndex+1))
-          })
-        )
+        newRoute = this.state.routePoints.slice(0, index).concat(this.state.routePoints.slice(index+1, newIndex+1)).concat(this.state.routePoints[index]).concat(this.state.routePoints.slice(newIndex+1))
+
       } else if (newIndex < index) {
-        await this.setState(
-          state => ({
-            routePoints: state.routePoints.slice(0, newIndex).concat(state.routePoints[index]).concat(state.routePoints.slice(newIndex, index)).concat(state.routePoints.slice(index+1))
-          })
-        )
+        newRoute = this.state.routePoints.slice(0, newIndex).concat(this.state.routePoints[index]).concat(this.state.routePoints.slice(newIndex, index)).concat(this.state.routePoints.slice(index+1))
+
       }
 
-      this.state.routePoints.forEach((placemark, i) => {
+      newRoute.forEach((placemark, i) => {
         placemark.properties
             .set({
               iconContent: i < 10 ? String.fromCharCode(i + 65) : ''
@@ -318,11 +442,23 @@ export default class extends React.Component {
         this.routeCollection.add(placemark);
       });
 
+      await this.setState(
+          state => ({
+            routePoints: newRoute
+          })
+        )
+
       this.howRouteShow();
     }
   }
 
 
+  /**
+   * Плавное смещение центра карты на указанную точку по id
+   * @function
+   * @name onViewPoint
+   * @params {string} id - уникальный идентификатор метки
+   */
   onViewPoint (id) {
     const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
 
@@ -334,19 +470,21 @@ export default class extends React.Component {
   }
 
 
+  /**
+   * Изменение отображения маршрута. Событие от RouteTypeButton
+   * Маршрут может быть представлен в виде ломаной линии (polyline) или мультимаршрута (multiRoute)
+   * @function
+   * @name onChangeRoutType
+   * @params {boolean} routeState - состояние переключателя маршрута
+   */
   async onChangeRoutType (routeState) {
     const {value} = routeState;
-    const routeType = value ? 'multiRout' : 'polyline';
-
-    await this.setState(
-      state => ({
-        routeType: routeType
-      })
-    )
+    this.routeType = value ? 'multiRoute' : 'polyline';
 
     this.howRouteShow();
   }
 
+  
   render () {
     let currentCoords = [0,0],
         currentAddress = 'Адрес не загружен';
@@ -355,10 +493,10 @@ export default class extends React.Component {
       currentCoords =  this.state.currentPoint.geometry.getCoordinates();
       currentAddress = this.state.currentPoint.properties.get('balloonContent');
     }
-    
+
     return (
       <Fragment>
-        <main className="main">
+        <div className="main">
           <div className="main__map">
             <Map />
           </div>
@@ -385,8 +523,7 @@ export default class extends React.Component {
               onChangeRoutType = { this.onChangeRoutType } 
               />
           </div>
-        </main>
-
+        </div>
       </Fragment>
     )
   }

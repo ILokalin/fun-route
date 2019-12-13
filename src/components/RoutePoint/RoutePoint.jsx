@@ -13,6 +13,15 @@ export default class extends React.PureComponent {
   }
 
 
+  /** 
+   * Начало "перетаскивания" точки в маршруте в списке
+   * С эстетической точки зрения используется собственный обработчик события Drag
+   * и отменяется стандртаная обработка.
+   * @function
+   * @name onDragStart
+   * @params {object.event} event - событие
+   * @return {boolean} false
+   */
   onDragStart (event) {
     event.preventDefault();
 
@@ -24,23 +33,37 @@ export default class extends React.PureComponent {
     target.style.position = 'absolute';
     target.style.zIndex = 10000;
 
+    // резервируется место для возврата элемента
     const reservePositionElement = document.createElement('div');
     target.before(reservePositionElement);
     document.body.append(target);
 
     moveAt(event.pageX, event.pageY);
 
+    /**
+     * запись координат для абсолютного позиционирования элемента на экране
+     */
     function moveAt (pageX, pageY) {
       target.style.left = pageX - targetWidth  / 2 + 'px';
       target.style.top  = pageY - targetHeight / 2 + 'px';
     }
 
 
+    // Перемещение элемента за курсором мыши
     function onMouseMove(event) {
       moveAt(event.pageX, event.pageY);
     }
 
-
+    /**
+     * Нажатая кнопка мыши отжата
+     * Если элемент находится за пределами контейнера с маршрутом, то возвращаем
+     * элемент на зарезервированное место и отменяем перенос
+     * Если элемент находится над другим элементом маршрута, то читаем его id
+     * ставим на новое место и вызываем событие для изменения последовательности
+     * @function
+     * @name onMouseUp
+     * @params {object.event} event - событие мыши "кнопка отжата"
+     */
     this.onMouseUp = (event) => {
       target.style.top = '-500px';
       const elementDropEnd = document.elementFromPoint(event.pageX, event.pageY);
@@ -76,7 +99,7 @@ export default class extends React.PureComponent {
       reservePositionElement.remove()
     }
 
-
+    // При выходе мыши за пределы экрана возвращаем элемент в его прежнюю позицию, отменяем перетаскивание
     this.onMouseOut = (event) => {
       if (event.relatedTarget === null)  {
         target.style.width = '';
@@ -101,7 +124,6 @@ export default class extends React.PureComponent {
   }
 
 
-
   render () {
     const point = this.props.point,
           name  = point.name,
@@ -109,7 +131,6 @@ export default class extends React.PureComponent {
           address = point.properties.get('balloonContent'),
           coords  = point.geometry.getCoordinates(),
           coordsHint = `координаты: ${CoordsToString(coords)}`;
-   
 
     return (
       <li className="route__item" data-index={ id } draggable="true" onDragStart={ this.onDragStart }>
