@@ -3,7 +3,6 @@ import ReactTestUtils from 'react-dom/test-utils';
 import rendrer from 'react-test-renderer';
 import faker from 'faker';
 import puppeteer from 'puppeteer';
-import GetStringCoordinates from '../GetStringCoordinates/GetStringCoordinates';
 
 
 let page;

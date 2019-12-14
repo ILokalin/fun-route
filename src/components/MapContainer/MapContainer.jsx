@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import Map from '../Map/Map';
-import NewPoint from '../NewPoint/NewPoint';
-import RouteContainer from '../RouteContainer/RouteContainer';
-import RouteTypeButton from '../RouteTypeButton/RouteTypeButton';
+import Map from '../Map';
+import NewPoint from '../NewPoint';
+import RouteContainer from '../RouteContainer';
+import RouteTypeButton from '../RouteTypeButton';
 
 
 export default class extends React.PureComponent {
@@ -10,6 +10,9 @@ export default class extends React.PureComponent {
     super(props);
 
     this.routeType = 'polyline';
+    this.ActiveElementColor = '#16A085';
+    this.LightElementColor = '#798995';
+    this.ItemBgColor = '#34495E';
     
     this.handleLoad = this.handleLoad.bind(this);
     this.createFunBalloonLayout = this.createFunBalloonLayout.bind(this);
@@ -95,7 +98,7 @@ export default class extends React.PureComponent {
         this.funPolyline = new window.ymaps.Polyline(
           [],
           {}, {
-            strokeColor: ['#000000','#16A085'],
+            strokeColor: [this.LightElementColor,this.ActiveElementColor],
             strokeWidth: [6,4],
             editorMaxPoints: 0
           })
@@ -109,9 +112,9 @@ export default class extends React.PureComponent {
   createFunBalloonLayout () {
     this.MyBalloonLayout = window.ymaps.templateLayoutFactory.createClass(
         '<div class="popover top styledPlacemark">' +
-          '<a class="close" href="#">&times;</a>' +
-          '<div class="arrow"></div>' +
-          '<div class="popover-inner">' +
+          '<a class="popover__close" href="#">&times;</a>' +
+          '<div class="popover__arrow arrow"></div>' +
+          '<div class="popover__inner">' +
             '$[[options.contentLayout observeSize minWidth=235 maxWidth=235 maxHeight=350]]' +
           '</div>' +
         '</div>', {
@@ -127,7 +130,7 @@ export default class extends React.PureComponent {
           this._element = document.querySelector('.popover');
           this.applyElementOffset();
 
-          this._element.querySelector('.close').addEventListener('click', this.onCloseClick.bind(this))
+          this._element.querySelector('.popover__close').addEventListener('click', this.onCloseClick.bind(this))
         },
 
         /**
@@ -136,7 +139,7 @@ export default class extends React.PureComponent {
          * @name clear
          */
         clear: function () {
-          this._element.querySelector('.close').removeEventListener('click', this.onCloseClick.bind(this))
+          this._element.querySelector('.popover__close').removeEventListener('click', this.onCloseClick.bind(this))
 
           this.constructor.superclass.clear.call(this);
         },
@@ -163,15 +166,12 @@ export default class extends React.PureComponent {
          * @name applyElementOffset
          */
         applyElementOffset: function () {
-          debugger
             this._element.style.left = `${-(this._element.offsetWidth / 2)}px`;
-            this._element.style.top = `${-(this._element.offsetHeight + this._element.querySelector('.arrow').offsetHeight)}px`;
+            this._element.style.top = `${-(this._element.offsetHeight + this._element.querySelector('.popover__arrow').offsetHeight - 5)}px`;
             
         },
 
         onCloseClick: function (event) {
-          // this.constructor.superclass.onCloseClick.apply(this, arguments);
-          debugger
           event.preventDefault();
 
           this.events.fire('userclose');
@@ -187,8 +187,8 @@ export default class extends React.PureComponent {
           if(!this._isElement(this._element)) {
               return this.constructor.superclass.getShape.call(this);
           }
-          debugger
-          var position = {
+
+          const position = {
             top: parseInt(this._element.style.top),
             left: parseInt(this._element.style.top)
           }
@@ -197,13 +197,13 @@ export default class extends React.PureComponent {
           return new window.ymaps.shape.Rectangle(new window.ymaps.geometry.pixel.Rectangle([
               [position.left, position.top], [
                   position.left + this._element.offsetWidth,
-                  position.top + this._element.offsetHeight + this._element.querySelector('.arrow').offsetHeight
+                  position.top + this._element.offsetHeight + this._element.querySelector('.popover__arrow').offsetHeight
               ]
           ]));
         },
 
         _isElement: function (element) {
-                  return element && element.querySelector('.arrow');
+                  return element && element.querySelector('.popover__arrow');
         }
         }
       );
@@ -228,7 +228,7 @@ export default class extends React.PureComponent {
         balloonHeader: 'Расположение'
       },{
         preset: 'islands#icon',
-        iconColor: '#16A085',
+        iconColor: this.ActiveElementColor,
         draggable: true,
         cursor: 'pointer',
         zIndex: 1000,
@@ -296,7 +296,7 @@ export default class extends React.PureComponent {
    * Генерация уникального ключа на основании текущего времени и адреса метки
    * @function
    * @name generateUniqueKey
-   * @params {string} [pre] адрес метки
+   * @params {string} pre - адрес метки
    * @return {string} уникальный ключ
    */
   generateUniqueKey (pre) {
@@ -311,7 +311,7 @@ export default class extends React.PureComponent {
    * Точка добавляется в коллекцию: this.routeCollection
    * @function
    * @name onAddPoint
-   * @params {string} [nameOfPoint] название точки точки
+   * @params {string} nameOfPoint - название точки точки
    */
   async onAddPoint (nameOfPoint) {
     const coords = this.state.currentPoint.geometry.getCoordinates();
@@ -323,10 +323,10 @@ export default class extends React.PureComponent {
       {
         balloonHeader: 'Расположение',
         balloonContent: balloonContent,
-        iconContent: numOfPoint < 10 ? String.fromCharCode(numOfPoint + 65) : ''
+        iconContent: numOfPoint < 10 ? String.fromCharCode(numOfPoint + 65) : '',
       },{
         preset: 'islands#circleIcon',
-        iconColor: '#34495E',
+        iconColor: this.ItemBgColor,
         draggable: true,
         cursor: 'pointer',
 
@@ -335,7 +335,7 @@ export default class extends React.PureComponent {
         balloonContentLayout: this.MyBalloonContentLayout,
         balloonPanelMaxMapArea: 0
       });
-    
+
     newPoint.geometry.id = this.generateUniqueKey(balloonContent);
     newPoint.name = nameOfPoint;
 
@@ -404,6 +404,8 @@ export default class extends React.PureComponent {
     );
 
     this.howRouteShow();
+
+    debugger
   }
 
 
@@ -456,7 +458,7 @@ export default class extends React.PureComponent {
    * и загрузку оставшихся меток. После этого вызывается howRouteShow для перезагрузки видимой части маршрута
    * @function
    * @name onDeletePoint
-   * @params {string} [id] - уникальный идентификатор метки в маршруте
+   * @params {string} id - уникальный идентификатор метки в маршруте
    */
   async onDeletePoint (id) {
     const index = this.state.routePoints.findIndex(point => point.geometry.id === id);

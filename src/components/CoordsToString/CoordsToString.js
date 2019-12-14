@@ -18,5 +18,5 @@ export default function (coords) {
     return `${deg}${"\u00B0"}${minutes}${"\u2032"}${seconds}${"\u2033"}`;
   }
 
-  return `${coordConvert(coords[0])} ${coordConvert(coords[1])}`
+  return `${coordConvert(coords[0])}  ${coordConvert(coords[1])}`
 }

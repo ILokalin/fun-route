@@ -5,11 +5,45 @@ import RouteContainer from "../RouteContainer/RouteContainer";
 
 
 describe('RouteContainer Component', () => {
-  const routPoints = [{name: 'Start test', address: 'line start test street', id: 'unique_line_1', coords: [0,0]},
-                     {name: 'End test', address: 'line end test street', id: 'unique_line_2', coords: [55,37]}]
+  const routePoints = [{
+    name: 'fake name for test',
+    geometry: {
+      id: 'fake_id_00000',
+      getCoordinates: () => {
+        return [55,37]
+      }
+    },
+    properties: {
+      get: (param) => {
+        if (param === 'balloonContent') {
+          return 'fake address for test 0001';
+        } else {
+          return 'ERROR! Check parameters "point.properties.get("balloonContent")" for address';
+        }
+      }
+    }
+  },
+  {
+    name: 'fake name for test',
+    geometry: {
+      id: 'fake_id_00001',
+      getCoordinates: () => {
+        return [58,58]
+      }
+    },
+    properties: {
+      get: (param) => {
+        if (param === 'balloonContent') {
+          return 'fake address for test 0002';
+        } else {
+          return 'ERROR! Check parameters "point.properties.get("balloonContent")" for address';
+        }
+      }
+    }
+  }]
 
   it('render snap', () => {
-    const component = rendrer.create(<RouteContainer  routPoints={routPoints} 
+    const component = rendrer.create(<RouteContainer  routePoints={routePoints} 
                                                       />);
 
     const tree = component.toJSON();

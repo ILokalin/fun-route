@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import CoordsToString from '../CoordsToString/CoordsToString';
+import CoordsToString from '../CoordsToString';
 import IconAdd from '../IconsBtn/IconAdd';
 
 

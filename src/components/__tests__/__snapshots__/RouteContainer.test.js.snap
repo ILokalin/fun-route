@@ -7,7 +7,7 @@ exports[`RouteContainer Component render snap 1`] = `
 >
   <li
     className="route__item"
-    data-index="unique_line_1"
+    data-index="fake_id_00000"
     draggable="true"
     onDragStart={[Function]}
   >
@@ -70,17 +70,17 @@ exports[`RouteContainer Component render snap 1`] = `
     </div>
     <div
       className="route__item-caption"
-      title="координаты: 00°00′00″  00°00′00″"
+      title="координаты: 55°00′00″  37°00′00″"
     >
       <h3
         className="route__item-address"
       >
-        line start test street
+        fake address for test 0001
       </h3>
       <p
         className="route__item-name"
       >
-        Start test
+        fake name for test
       </p>
     </div>
     <button
@@ -128,7 +128,7 @@ exports[`RouteContainer Component render snap 1`] = `
   </li>
   <li
     className="route__item"
-    data-index="unique_line_2"
+    data-index="fake_id_00001"
     draggable="true"
     onDragStart={[Function]}
   >
@@ -191,17 +191,17 @@ exports[`RouteContainer Component render snap 1`] = `
     </div>
     <div
       className="route__item-caption"
-      title="координаты: 55°00′00″  37°00′00″"
+      title="координаты: 58°00′00″  58°00′00″"
     >
       <h3
         className="route__item-address"
       >
-        line end test street
+        fake address for test 0002
       </h3>
       <p
         className="route__item-name"
       >
-        End test
+        fake name for test
       </p>
     </div>
     <button

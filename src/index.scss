@@ -1,9 +1,9 @@
-@import './components/Styles/Styles.scss';
+@import './components/CommonStyles/CommonStyles.scss';
 @import './App';
+@import './components/Footer/Footer';
+@import './components/Header/Header';
 @import './components/Map/Map';
+@import './components/MyBalloonLayout/MyBalloonLayout';
 @import './components/NewPoint/NewPoint.scss';
 @import './components/RoutePoint/RoutePoint.scss';
 @import './components/RouteTypeButton/RouteTypeButton.scss';
-@import './components/Header/Header';
-@import './components/Footer/Footer';
-@import './components/MapContainer/MyBalloonLayout';

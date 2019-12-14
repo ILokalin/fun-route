@@ -46,7 +46,7 @@ exports[`New point field Component create render snap 1`] = `
   <p
     className="new-point__description"
   >
-    Не определено место положения
+    координаты: 00°00′00″  00°00′00″
   </p>
 </div>
 `;

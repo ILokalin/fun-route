@@ -1,5 +1,5 @@
 import React from 'react';
-import RoutePoint from '../../components/RoutePoint/RoutePoint';
+import RoutePoint from '../RoutePoint';
 
 
 export default class extends React.PureComponent {

@@ -1,8 +1,8 @@
 import React from 'react';
+import CoordsToString from '../CoordsToString';
+import IconDown from '../IconsBtn/IconDown';
 import IconRemove from '../IconsBtn/IconRemove';
 import IconUp from '../IconsBtn/IconUp';
-import IconDown from '../IconsBtn/IconDown';
-import CoordsToString from '../CoordsToString/CoordsToString';
 
 
 export default class extends React.PureComponent {
@@ -125,10 +125,8 @@ export default class extends React.PureComponent {
 
 
   render () {
-    const point = this.props.point,
-          name  = point.name,
-          id    = point.geometry.id,
-          address = point.properties.get('balloonContent'),
+    const {point, point: {name, geometry: {id}}} = this.props
+    const address = point.properties.get('balloonContent'),
           coords  = point.geometry.getCoordinates(),
           coordsHint = `координаты: ${CoordsToString(coords)}`;
 

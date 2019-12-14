@@ -3,17 +3,29 @@ import ReactTestUtils from 'react-dom/test-utils';
 import rendrer from 'react-test-renderer';
 import RoutePoint from '../../components/RoutePoint/RoutePoint';
 
-const testObject = {
-  name: 'Start test',
-  address: 'line start test street', 
-  id: 'unique_line_1', 
-  coords: [0,0]
-  }
+const fakePoint = {
+    name: 'Start test',
+    geometry: {
+      id: 'unique_line_1',
+      getCoordinates: () => {
+        return [0,0]
+      }
+    },
+    properties: {
+      get: (param) => {
+        if (param === 'balloonContent') {
+          return 'line start test street';
+        } else {
+          return 'ERROR! Check parameters "point.properties.get("balloonContent")" for address';
+        }
+      }
+    }
+  }  
 
 describe('Route point create', () => {
   it('render snap', () => {
-    const component = rendrer.create(<RoutePoint  point={testObject}
-                                                  key={testObject.id}
+    const component = rendrer.create(<RoutePoint  point={fakePoint}
+                                                  key={fakePoint.id}
                                                   pointLetter={'A'}/>);
 
     const tree = component.toJSON();
