@@ -9,10 +9,11 @@ export default class extends React.PureComponent {
   constructor (props) {
     super(props);
 
-    this.routeType = 'polyline';
+    
     this.ActiveElementColor = '#16A085';
     this.LightElementColor = '#798995';
     this.ItemBgColor = '#34495E';
+    this.startPoint = [55.72, 37.64];
     
     this.handleLoad = this.handleLoad.bind(this);
     this.createFunBalloonLayout = this.createFunBalloonLayout.bind(this);
@@ -29,7 +30,8 @@ export default class extends React.PureComponent {
   state = {
     routePoints: [],
     currentPoint: {},
-    ready: false,
+    isLocationFound: false,
+    routeType: 'polyline'
   }
 
 
@@ -51,7 +53,7 @@ export default class extends React.PureComponent {
 
     window.ymaps.ready(() => {
       this.funMap = new window.ymaps.Map('map', {
-        center: [55,35],
+        center: this.startPoint,
         zoom: 11
       }, {
         searchControlProvider: 'yandex#search'
@@ -66,18 +68,24 @@ export default class extends React.PureComponent {
       this.createFunBalloonLayout();
       this.createPlacemark();
 
+      /**
+       * Promise определения местоположения от ymaps
+       * Время ожидания 2000мс
+       * Провайдер "Яндекс":
+       * - не требует запроса от пользователя в firefox
+       * - не смотря на короткий таймаут работате на мобильных устройствах
+       * - не отличатеся точностью - указывает местоположение провайдера
+       */
       window.ymaps.geolocation.get({
-        provider: 'auto',
-        mapStateAutoApply: true
+        provider: 'yandex',
+        mapStateAutoApply: true,
+        timeout: 2000
       })
         .then((result) => {
           _this.funMap.setZoom(5);
 
           return _this.funMap.panTo(
-            result.geoObjects.position, {
-              flying: true,
-              duration: 1500
-            }
+            result.geoObjects.position, {}
           );
         })
         .then(() => {
@@ -86,26 +94,31 @@ export default class extends React.PureComponent {
           _this.funMap.setZoom(12);
           _this.state.currentPoint.setCoord(newCoords);
 
-          document.querySelector('.map-region__map').classList.remove('map-region__map--hidden');
-        })
-
-        this.funMap.events.add('click', (event) => {
-          const newCoords = event.getSourceEvent().originalEvent.coords;
-
-          this.state.currentPoint.setCoord(newCoords);
-        })
-
-        this.funPolyline = new window.ymaps.Polyline(
-          [],
-          {}, {
-            strokeColor: [this.LightElementColor,this.ActiveElementColor],
-            strokeWidth: [6,4],
-            editorMaxPoints: 0
+          _this.setState({
+            isLocationFound: true
           })
-        
-        this.funMap.geoObjects.add (
-          this.funPolyline
-          );
+        })
+        .catch((error) => {
+          console.log(`geoProblem ${error}`)
+        })
+
+      this.funMap.events.add('click', (event) => {
+        const newCoords = event.getSourceEvent().originalEvent.coords;
+
+        this.state.currentPoint.setCoord(newCoords);
+      })
+
+      this.funPolyline = new window.ymaps.Polyline(
+        [],
+        {}, {
+          strokeColor: [this.LightElementColor,this.ActiveElementColor],
+          strokeWidth: [6,4],
+          editorMaxPoints: 0
+        })
+      
+      this.funMap.geoObjects.add (
+        this.funPolyline
+        );
     })
   }
 
@@ -219,7 +232,7 @@ export default class extends React.PureComponent {
    * Саздание текущей метки для выделения точки на карте
    * @function
    * @name createPlacemark
-   * @param [lat,long] координаты точки (ширина, долгота)
+   * @param {array} [lat,long] координаты точки (ширина, долгота)
    */
   createPlacemark (createCoords = this.funMap.getCenter()) {
     const currentPoint = new window.ymaps.Placemark (
@@ -240,10 +253,9 @@ export default class extends React.PureComponent {
       }
     );
 
-    this.setState(state => ({
-            currentPoint: currentPoint,
-            ready: true
-          }));
+    this.setState({
+      currentPoint: currentPoint
+      });
 
     /**
      * Метод для установки новых координат и изменения состояния маркера
@@ -264,7 +276,11 @@ export default class extends React.PureComponent {
           const firstGeoObject = res.geoObjects.get(0);
 
           const addressPointIcon = [
-            firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+            firstGeoObject.getLocalities().length 
+              ? firstGeoObject.getLocalities() 
+              : firstGeoObject.getAdministrativeAreas().length 
+                ? firstGeoObject.getAdministrativeAreas() 
+                : firstGeoObject.getCountry(),
             firstGeoObject.getThoroughfare() || firstGeoObject.getPremise(),
             firstGeoObject.getPremiseNumber()
             ].filter(Boolean).join(',').split(',').join(', ');
@@ -373,7 +389,11 @@ export default class extends React.PureComponent {
           const firstGeoObject = res.geoObjects.get(0);
 
           const addressPointIcon = [
-            firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+            firstGeoObject.getLocalities().length 
+              ? firstGeoObject.getLocalities() 
+              : firstGeoObject.getAdministrativeAreas().length 
+                ? firstGeoObject.getAdministrativeAreas() 
+                : firstGeoObject.getCountry(),
             firstGeoObject.getThoroughfare() || firstGeoObject.getPremise(),
             firstGeoObject.getPremiseNumber()
             ].filter(Boolean).join(',').split(',').join(', ');
@@ -404,8 +424,6 @@ export default class extends React.PureComponent {
     );
 
     this.howRouteShow();
-
-    debugger
   }
 
 
@@ -419,7 +437,7 @@ export default class extends React.PureComponent {
    * @name howRouteShow
    */
   howRouteShow () {
-    if (this.routeType === 'polyline') {
+    if (this.state.routeType === 'polyline') {
       const pointsForLine = this.state.routePoints.map(point => point.geometry.getCoordinates());
 
       this.funPolyline.geometry.setCoordinates(pointsForLine);
@@ -559,7 +577,11 @@ export default class extends React.PureComponent {
    */
   async onChangeRoutType (routeState) {
     const {value} = routeState;
-    this.routeType = value ? 'multiRoute' : 'polyline';
+    const routeType = value ? 'multiRoute' : 'polyline';
+
+    await this.setState({
+      routeType: routeType
+    })
 
     this.howRouteShow();
   }
@@ -569,7 +591,7 @@ export default class extends React.PureComponent {
     let currentCoords = [0,0],
         currentAddress = 'Адрес не загружен';
 
-    if (this.state.ready) {
+    if (this.state.isLocationFound) {
       currentCoords =  this.state.currentPoint.geometry.getCoordinates();
       currentAddress = this.state.currentPoint.properties.get('balloonContent');
     }
@@ -578,7 +600,9 @@ export default class extends React.PureComponent {
       <Fragment>
         <div className="main">
           <div className="main__map">
-            <Map />
+            <Map 
+              isLocationFound = { this.state.isLocationFound }
+              />
           </div>
 
           <div className="main__new-point">
@@ -586,6 +610,7 @@ export default class extends React.PureComponent {
               currentCoords = { currentCoords }
               onAddPoint    = { this.onAddPoint }
               placemarkAddress = { currentAddress }
+              isLocationFound  = { this.state.isLocationFound }
               />
           </div>
 
@@ -600,7 +625,8 @@ export default class extends React.PureComponent {
 
           <div className="main__type-button">
             <RouteTypeButton
-              onChangeRoutType = { this.onChangeRoutType } 
+              onChangeRoutType = { this.onChangeRoutType }
+              routeType = { this.state.routeType }
               />
           </div>
         </div>

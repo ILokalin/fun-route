@@ -16,7 +16,7 @@
     transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 
     @media (min-width: $Screen-md) {
-      max-height: 35rem;
+      height: 35rem;
     }
 
     @media (min-width: $Screen-ld) {
@@ -25,19 +25,11 @@
     }
 
     &--hidden {
-      opacity: 1;
-
-      @media (min-width: $Screen-md) {
-        opacity: 0;
-      }
+      opacity: 0;
     }
 
     &--hidden + .map-region__preloader {
-      display: none;
-
-      @media (min-width: $Screen-md) {
-        display: block;
-      }
+      display: block;
     }
   }
 

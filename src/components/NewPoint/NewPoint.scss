@@ -3,33 +3,40 @@
   width: 100%;
   user-select: none;
 
+  &__input {
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid $LightElement-color;
+    border-radius: 4px;
+    background-color: $ActiveElement-color;
+    padding-top: 0.9375rem;
+    padding-right: 3.25rem;
+    padding-left: 1rem;
+    width: 100%;
+    height: 3.5rem;
+    text-overflow: ellipsis;
+    color: white;
+    font-size: 1rem;
+
+    &::placeholder {
+      color:$WhiteElement-color;
+    }
+
+    &:disabled::placeholder,
+    &:disabled ~ .new-point__caption,
+    &:disabled ~ .new-point__description {
+      opacity: 0.5;
+    }
+  }
+
   &__caption {
     position: absolute;
+    top: 0.5rem;
+    left: 1rem;
     margin: 0;
     padding: 0;
     line-height: 0.75rem;
     color: $ContainerBg-color;
-    top: 0.5rem;
-    left: 1rem;
-  }
-
-  &__input {
-    box-sizing: border-box;
-    width: 100%;
-    height: 3.5rem;
-    color: white;
-    border-radius: 4px;
-    border: 1px solid $LightElement-color;
-    padding-left: 1rem;
-    padding-right: 3.25rem;
-    padding-top: 0.9375rem;
-    background-color: $ActiveElement-color;
-    font-size: 1rem;
-    text-overflow: ellipsis;
-  }
-
-  &__input::placeholder {
-    color:$WhiteElement-color;
   }
 
 
@@ -47,23 +54,33 @@
     padding: 0;
     width: 1.875rem;
     height: 1.875rem;
+  
+    &:hover {
+      transform: rotate(90deg);
+      transition-duration: 0.3s;
+      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    &:active .icon__path{
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+      opacity: 0.2;
+      fill: white;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+
+    &:disabled:hover {
+      transform: none;
+    }
+
+    &:disabled:active .icon__path {
+      opacity: 1;
+      fill: $WhiteElement-color;
+    }
   }
-
-  &__add-button:hover {
-    transform: rotate(90deg);
-    transition-duration: 0.3s;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-
-  }
-
-
-  &__add-button:active .icon__path{
-    transition-duration: 0.2s;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    opacity: 0.2;
-    fill: white;
-  }
-
 
   &__description {
     padding-top: 5px;

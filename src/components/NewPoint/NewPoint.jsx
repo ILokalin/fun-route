@@ -30,26 +30,28 @@ export default class extends React.PureComponent {
 
 
   render () {
-    const {placemarkAddress, currentCoords} = this.props;
+    const {placemarkAddress, currentCoords, isLocationFound} = this.props;
     const hintString = `координаты: ${CoordsToString(currentCoords)}`;
+    const disabledValue = isLocationFound ? '' : 'disabled'
 
     return (
         <Fragment>
           <div className="new-point">
-            <h3 className="new-point__caption">Назовите новую точку</h3>
             <input  className="new-point__input"
+                    disabled={ disabledValue }
                     title="Добавьте точку в маршрут"
                     type="text"
-                    ref={this.getInput}
+                    ref={ this.getInput }
                     name="address"
                     autoComplete="off"
                     onKeyDown={(e) => this.keyDown(e.key)}
                     placeholder={placemarkAddress}
                     />
-            <button className="new-point__add-button" type="button" onClick={this.handleAddPoint}>
+            <h3 className="new-point__caption">Назовите новую точку</h3>
+            <button className="new-point__add-button" type="button" disabled={ disabledValue } onClick={ this.handleAddPoint }>
               <IconAdd />
             </button>
-            <p className="new-point__description">{hintString}</p>
+            <p className="new-point__description">{ hintString }</p>
           </div>
         </Fragment>
       );
