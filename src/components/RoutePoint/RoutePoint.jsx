@@ -59,6 +59,12 @@ export default class extends React.PureComponent {
     function moveAt (pageX, pageY) {
       target.style.left = pageX - targetWidth  / 2 + 'px';
       target.style.top  = pageY - targetHeight / 2 + 'px';
+
+      const whereI = document.elementFromPoint(pageX - targetWidth  / 2 , pageY - targetHeight / 2  ).closest('.route__item');
+      if ( whereI ) {
+        console.log(whereI)
+      }
+      
     }
 
 
