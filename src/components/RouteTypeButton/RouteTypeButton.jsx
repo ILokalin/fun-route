@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconRound from '../IconsBtn/IconRound';
 import IconRoute from '../IconsBtn/IconRoute';
 
@@ -8,6 +9,11 @@ export default class extends React.PureComponent {
     super(props);
 
     this.changeRoutType = this.changeRoutType.bind(this);
+  }
+
+  static propReact = {
+    routeType: PropTypes.oneOf(['polyline', 'multiRoute']).isRequired,
+    onChangeRoutType: PropTypes.func.isRequired
   }
 
   changeRoutType (event) {

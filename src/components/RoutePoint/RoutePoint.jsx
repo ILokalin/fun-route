@@ -1,8 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CoordsToString from '../CoordsToString';
 import IconDown from '../IconsBtn/IconDown';
 import IconRemove from '../IconsBtn/IconRemove';
 import IconUp from '../IconsBtn/IconUp';
+
 
 
 export default class extends React.PureComponent {
@@ -13,14 +15,25 @@ export default class extends React.PureComponent {
   }
 
 
+  static routeType = {
+    point:        PropTypes.object.isRequired,
+    newIndexFind: PropTypes.func.isRequired,
+    pointLetter:  PropTypes.string,
+  }
+
+  static propsDefault = { 
+    pointLetter: 'X'
+  }
+
+
   /** 
    * Начало "перетаскивания" точки в маршруте в списке
    * С эстетической точки зрения используется собственный обработчик события Drag
    * и отменяется стандртаная обработка.
    * @function
-   * @name onDragStart
-   * @params {object.event} event - событие
-   * @return {boolean} false
+   * @name    onDragStart
+   * @params  {object.event} event - событие
+   * @return  {boolean} false
    */
   onDragStart (event) {
     event.preventDefault();
@@ -61,12 +74,12 @@ export default class extends React.PureComponent {
      * Если элемент находится над другим элементом маршрута, то читаем его id
      * ставим на новое место и вызываем событие для изменения последовательности
      * @function
-     * @name onMouseUp
-     * @params {object.event} event - событие мыши "кнопка отжата"
+     * @name    onMouseUp
+     * @params  {object.event} event - событие мыши "кнопка отжата"
      */
     this.onMouseUp = (event) => {
       target.style.top = '-500px';
-      const elementDropEnd = document.elementFromPoint(event.pageX, event.pageY);
+      const elementDropEnd = document.elementFromPoint(event.clientX, event.clientY);
 
       document.removeEventListener('mousemove', onMouseMove);
       target.removeEventListener('mouseup', this.onMouseUp);
@@ -78,9 +91,10 @@ export default class extends React.PureComponent {
       target.style.left = '';
 
       const beforeItem = elementDropEnd.closest('.route__item');
-
+debugger
       if (beforeItem) {
         beforeItem.before(target);
+        reservePositionElement.remove();
         this.props.newIndexFind(target.dataset.index)
 
       } else {
@@ -88,6 +102,7 @@ export default class extends React.PureComponent {
 
         if (inRouteContainer) {
           inRouteContainer.append(target);
+          reservePositionElement.remove();
           this.props.newIndexFind(target.dataset.index)
 
         } else {

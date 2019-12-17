@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import RoutePoint from '../RoutePoint';
+
 
 
 export default class extends React.PureComponent {
@@ -8,6 +10,14 @@ export default class extends React.PureComponent {
 
     this.handlePoint = this.handlePoint.bind(this);
     this.newIndexReady = this.newIndexReady.bind(this);
+  }
+
+
+  static propTypes = {
+    routePoints:    PropTypes.array.isRequired,
+    onDeletePoint:  PropTypes.func.isRequired,
+    onViewPoint:    PropTypes.func.isRequired,
+    onChangeSequence: PropTypes.func.isRequired
   }
 
 
@@ -35,7 +45,6 @@ export default class extends React.PureComponent {
       } else if (button.value === 'down') {
         const position = this.positionIdInRoute(itemIndex);
         const newIndex = (position === document.querySelectorAll('.route__item').length -1) ? 0 : position + 1;
-        debugger
         this.props.onChangeSequence(newIndex, itemIndex);
 
       } else if (button.value === 'remove') {
@@ -84,7 +93,6 @@ export default class extends React.PureComponent {
    */
   newIndexReady (id) {
     const newIndex = this.positionIdInRoute(id)
-
     this.props.onChangeSequence(newIndex, id);
   }
 

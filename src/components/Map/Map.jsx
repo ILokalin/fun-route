@@ -1,11 +1,15 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
 
 export default class extends React.Component {
 
+  static propTypes = {
+  isLocationFound: PropTypes.bool.isRequired
+  }
+
   render () {
     const { isLocationFound } = this.props
-
 
     return (
       <div className="map-region">

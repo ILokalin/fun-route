@@ -8,7 +8,6 @@ import RouteTypeButton from '../RouteTypeButton';
 export default class extends React.PureComponent {
   constructor (props) {
     super(props);
-
     
     this.ActiveElementColor = '#16A085';
     this.LightElementColor = '#798995';
@@ -38,6 +37,7 @@ export default class extends React.PureComponent {
   componentDidMount () {
     window.addEventListener ('load', this.handleLoad);
   }
+
 
   /**
    * Инициализация яндекс-карты после полной ее загрузки
@@ -72,17 +72,17 @@ export default class extends React.PureComponent {
        * Promise определения местоположения от ymaps
        * Время ожидания 2000мс
        * Провайдер "Яндекс":
-       * - не требует запроса от пользователя в firefox
-       * - не смотря на короткий таймаут работате на мобильных устройствах
+       * - не требует от пользователя разрешение определить местоположение
+       * - не смотря на короткий таймаут работает на мобильных устройствах
        * - не отличатеся точностью - указывает местоположение провайдера
        */
       window.ymaps.geolocation.get({
         provider: 'yandex',
         mapStateAutoApply: true,
         timeout: 2000
-      })
+        })
         .then((result) => {
-          _this.funMap.setZoom(5);
+          _this.funMap.setZoom(14);
 
           return _this.funMap.panTo(
             result.geoObjects.position, {}
@@ -91,7 +91,6 @@ export default class extends React.PureComponent {
         .then(() => {
           const newCoords = _this.funMap.getCenter();
 
-          _this.funMap.setZoom(12);
           _this.state.currentPoint.setCoord(newCoords);
 
           _this.setState({
@@ -519,7 +518,7 @@ export default class extends React.PureComponent {
   async onChangeSequence (newIndex, id) {
     const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
 
-    if (index > -1) {
+    if (index > -1 && index !== newIndex) {
       let newRoute = [];
       this.routeCollection.removeAll();
       
@@ -588,8 +587,8 @@ export default class extends React.PureComponent {
 
   
   render () {
-    let currentCoords = [0,0],
-        currentAddress = 'Адрес не загружен';
+    let currentCoords,
+        currentAddress;
 
     if (this.state.isLocationFound) {
       currentCoords =  this.state.currentPoint.geometry.getCoordinates();
