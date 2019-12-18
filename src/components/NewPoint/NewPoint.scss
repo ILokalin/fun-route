@@ -45,6 +45,7 @@
     top: 0.8125rem;
     right: 1rem;
     transition-duration: 0.3s;
+    transition-delay: 0.2s;
     transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     margin: 0;
     outline: none;
@@ -57,6 +58,7 @@
   
     &:hover {
       transform: rotate(90deg);
+      transition-delay: 0.1s;
       transition-duration: 0.3s;
       transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     }

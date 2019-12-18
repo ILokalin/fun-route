@@ -1,0 +1,70 @@
+.help {
+  max-width: 900px;
+  margin: 0 auto;
+  color: $WhiteElement-color;
+  padding-right: $Side-gap;
+  padding-left: $Side-gap;
+  box-sizing: border-box;
+
+
+  &__title-common {
+    text-align: center;
+    padding-bottom: 30px;
+  }
+
+
+  &__title {
+    text-align: center;
+    padding-bottom: 20px;
+  }
+
+
+  &__image {
+    float: left;
+    border-radius: 4px;
+    border: 1px solid $LightElement-color;
+    margin-bottom: 10px;
+    
+    @media (min-width: $Screen-md) {
+      margin-right: 10px;
+    }
+  }
+
+  &__text {
+    padding-bottom: 40px;
+    display: block;
+    line-height: 24px;
+    hyphens: manual;
+    margin: 0 auto;
+    width: 300px;
+
+    @media (min-width: $Screen-md) {
+      width: auto;
+      margin: 0;
+    }
+  }
+
+  &__text::after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  & .icon {
+    margin: 0 5px;
+    width: 20px;
+    height: 20px;
+    transform: translateY(4px);
+  }
+
+  & .icon__path { 
+    fill: $LightElement-color;
+  }
+}

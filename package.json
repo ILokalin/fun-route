@@ -11,6 +11,7 @@
     "puppeteer-io": "^1.12.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "react-test-renderer": "^16.11.0"
   },

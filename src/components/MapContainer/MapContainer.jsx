@@ -344,6 +344,7 @@ export default class extends React.PureComponent {
         iconColor: this.ItemBgColor,
         draggable: true,
         cursor: 'pointer',
+        hideIconOnBalloonOpen: false,
 
         balloonShadow: false,
         balloonLayout: this.MyBalloonLayout,
