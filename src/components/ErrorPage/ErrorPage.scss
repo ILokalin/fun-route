@@ -1,0 +1,19 @@
+.error-page {
+  max-width: 1160px;
+  margin: 0 auto;
+  color: $WhiteElement-color;
+
+  &__header {
+    text-align: center;
+    padding-bottom: 50px;
+  }
+
+  &__text {
+    line-height: 30px;
+  }
+
+  &__link {
+    display: block;
+    color: $LightElement-color;
+  }
+}

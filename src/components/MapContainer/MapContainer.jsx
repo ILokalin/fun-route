@@ -3,6 +3,7 @@ import Map from '../Map';
 import NewPoint from '../NewPoint';
 import RouteContainer from '../RouteContainer';
 import RouteTypeButton from '../RouteTypeButton';
+import PropTypes from 'prop-types';
 
 
 export default class extends React.PureComponent {
@@ -14,10 +15,6 @@ export default class extends React.PureComponent {
     this.ItemBgColor = '#34495E';
     this.startPoint = [55.72, 37.64];
     
-    this.handleLoad = this.handleLoad.bind(this);
-    this.createFunBalloonLayout = this.createFunBalloonLayout.bind(this);
-    this.createPlacemark = this.createPlacemark.bind(this);
-    this.howRouteShow = this.howRouteShow.bind(this);
     this.onAddPoint = this.onAddPoint.bind(this);
     this.onDeletePoint = this.onDeletePoint.bind(this);
     this.onChangeSequence = this.onChangeSequence.bind(this);
@@ -25,6 +22,15 @@ export default class extends React.PureComponent {
     this.onChangeRoutType = this.onChangeRoutType.bind(this);
   }
 
+  static propTypes = {
+    newSession:       PropTypes.bool.isRequired,
+    mapState:         PropTypes.object.isRequired,
+    onChangePage:     PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    newSession: true
+  }
 
   state = {
     routePoints: [],
@@ -35,7 +41,41 @@ export default class extends React.PureComponent {
 
 
   componentDidMount () {
-    window.addEventListener ('load', this.handleLoad);
+    const { newSession} = this.props
+    debugger
+
+    if (newSession) {
+      window.addEventListener ('load', this.handleLoad());
+    } else {
+      this.handleLoad()
+    }
+  }
+
+
+  /**
+   * При смене страницы на /help, необходима отправка всех данных о текущем состоянии карты в App.js
+   * Координаты центральной точки, установленный zoom, положение основного маркера, вид пути и координаты точек
+   */
+  componentWillUnmount () {
+    const { currentPoint, routePoints, isLocationFound, routeType } = this.state;
+
+    const currentPointCoords = currentPoint.geometry.getCoordinates(),
+          mapZoom = this.funMap.getZoom(),
+          mapCenter = this.funMap.getCenter(),
+          routePointsArray = routePoints.map(point => ({
+              coords: point.geometry.getCoordinates(),
+              name: point.name,
+              address: point.properties.get('balloonContent')
+              }));
+
+    this.props.onChangePage({
+      mapCenter: mapCenter,
+      mapZoom: mapZoom,
+      currentPointCoords: currentPointCoords,
+      routePointsArray: routePointsArray,
+      isLocationFound: isLocationFound,
+      routeType: routeType
+    });
   }
 
 
@@ -49,12 +89,13 @@ export default class extends React.PureComponent {
    * @name handleLoad
    */
   handleLoad () {
+    const { newSession, mapState} = this.props;
     const _this = this;
 
     window.ymaps.ready(() => {
       this.funMap = new window.ymaps.Map('map', {
-        center: this.startPoint,
-        zoom: 11
+        center: mapState.mapCenter,
+        zoom: mapState.mapZoom
       }, {
         searchControlProvider: 'yandex#search'
       });
@@ -66,40 +107,49 @@ export default class extends React.PureComponent {
       this.funMap.geoObjects.add(this.currentPositionCollection);
       
       this.createFunBalloonLayout();
-      this.createPlacemark();
+      this.createPlacemark(mapState.currentPointCoords);
 
       /**
-       * Promise определения местоположения от ymaps
-       * Время ожидания 2000мс
-       * Провайдер "Яндекс":
-       * - не требует от пользователя разрешение определить местоположение
-       * - не смотря на короткий таймаут работает на мобильных устройствах
-       * - не отличатеся точностью - указывает местоположение провайдера
-       */
-      window.ymaps.geolocation.get({
-        provider: 'yandex',
-        mapStateAutoApply: true,
-        timeout: 2000
-        })
-        .then((result) => {
-          _this.funMap.setZoom(14);
-
-          return _this.funMap.panTo(
-            result.geoObjects.position, {}
-          );
-        })
-        .then(() => {
-          const newCoords = _this.funMap.getCenter();
-
-          _this.state.currentPoint.setCoord(newCoords);
-
-          _this.setState({
-            isLocationFound: true
+         * Promise определения местоположения от ymaps
+         * Время ожидания 2000мс
+         * Провайдер "Яндекс":
+         * - не требует от пользователя разрешение определить местоположение
+         * - не смотря на короткий таймаут работает на мобильных устройствах
+         * - не отличатеся точностью - указывает местоположение провайдера
+         */
+      if (newSession || !mapState.isLocationFound) {
+        window.ymaps.geolocation.get({
+          provider: 'yandex',
+          mapStateAutoApply: true,
+          timeout: 2000
           })
-        })
-        .catch((error) => {
-          console.log(`geoProblem ${error}`)
-        })
+          .then((result) => {
+            _this.funMap.setZoom(14);
+
+            return _this.funMap.panTo(
+              result.geoObjects.position, {}
+            );
+          })
+          .then(() => {
+            const newCoords = _this.funMap.getCenter();
+
+            _this.state.currentPoint.setCoord(newCoords);
+
+            _this.setState({
+              isLocationFound: true
+            })
+          })
+          .catch((error) => {
+            console.log(`geoProblem ${error}`)
+          })
+      } else {
+        this.setState(
+          state => ({
+            isLocationFound: mapState.isLocationFound,
+            routeType: mapState.routeType
+          })
+        )
+      }
 
       this.funMap.events.add('click', (event) => {
         const newCoords = event.getSourceEvent().originalEvent.coords;
@@ -118,8 +168,15 @@ export default class extends React.PureComponent {
       this.funMap.geoObjects.add (
         this.funPolyline
         );
+
+      if (!newSession) {
+        mapState.routePointsArray.forEach(point => {
+          this.handleAddPoint(point);
+        })
+      }
     })
   }
+
 
   createFunBalloonLayout () {
     this.MyBalloonLayout = window.ymaps.templateLayoutFactory.createClass(
@@ -180,7 +237,7 @@ export default class extends React.PureComponent {
         applyElementOffset: function () {
             this._element.style.left = `${-(this._element.offsetWidth / 2)}px`;
             this._element.style.top = `${-(this._element.offsetHeight + this._element.querySelector('.popover__arrow').offsetHeight - 5)}px`;
-            
+
         },
 
         onCloseClick: function (event) {
@@ -258,6 +315,8 @@ export default class extends React.PureComponent {
 
     /**
      * Метод для установки новых координат и изменения состояния маркера
+     * @function
+     * @name setCoord
      * @param [lat,long] координаты точки (ширина, долгота)
      */
     currentPoint.setCoord = async (coords) => {
@@ -321,23 +380,44 @@ export default class extends React.PureComponent {
 
 
   /**
-   * Добавление точки в маршрут
-   * Точка добавляется в массив:    this.state.routePoints
-   * Точка добавляется в коллекцию: this.routeCollection
+   * Подготовка для добавления точки в маршрут. Создает объект с координатами точки
+   * именем и адресом из текущей точки.
    * @function
    * @name onAddPoint
    * @params {string} nameOfPoint - название точки точки
    */
-  async onAddPoint (nameOfPoint) {
-    const coords = this.state.currentPoint.geometry.getCoordinates();
-    const balloonContent = this.state.currentPoint.properties.get('balloonContent');
+  onAddPoint (nameOfPoint) {
+    const balloonContent = this.state.currentPoint.properties.get('balloonContent'),
+          coords = this.state.currentPoint.geometry.getCoordinates();
+
+    this.handleAddPoint({
+      address: balloonContent,
+      name: nameOfPoint,
+      coords: coords
+    })
+  }
+
+  /**
+   * Добавление точки в маршрут
+   * Точка добавляется в массив:    this.state.routePoints
+   * Точка добавляется в коллекцию: this.routeCollection
+   * @function
+   * @name handleAddPoint
+   * @params {object} point - объект с полной информацией для новой точки
+   * point.address - {string} - адрес точки
+   * point.name - {string} - имя для точки
+   * point.coords - {array} - массив координат
+   */
+  async handleAddPoint (point) {
+    const { coords, address, name } = point
+    debugger
     const numOfPoint = this.state.routePoints.length;
 
     const newPoint = new window.ymaps.Placemark (
        coords,
       {
         balloonHeader: 'Расположение',
-        balloonContent: balloonContent,
+        balloonContent: address,
         iconContent: numOfPoint < 10 ? String.fromCharCode(numOfPoint + 65) : '',
       },{
         preset: 'islands#circleIcon',
@@ -352,8 +432,8 @@ export default class extends React.PureComponent {
         balloonPanelMaxMapArea: 0
       });
 
-    newPoint.geometry.id = this.generateUniqueKey(balloonContent);
-    newPoint.name = nameOfPoint;
+    newPoint.geometry.id = this.generateUniqueKey(address);
+    newPoint.name = name;
 
     /**
      * Смена координат (перенос метки на карте) вызывает смену координат в ломаной

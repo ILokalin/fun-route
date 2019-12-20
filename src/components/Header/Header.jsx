@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'
 
 
 export default class extends React.Component {
@@ -8,8 +9,8 @@ export default class extends React.Component {
     return (
       <div className="header">
         <div className="header__up-line">
-          <a className="header__logo" href="/">MyRoute#</a>
-          <a className="header__help" href="/help">Help</a>
+          <NavLink to="/" className="header__logo">FunRoute#</NavLink>
+          <NavLink to="/help" className="header__help" >Help</NavLink>
         </div>
         <div className="header__decor-line"></div>
       </div>
