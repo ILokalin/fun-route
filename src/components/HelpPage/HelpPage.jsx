@@ -13,10 +13,8 @@ import IconAdd from '../IconsBtn/IconAdd';
 
 export default function () {
   return (
-    <Fragment>
-      
       <section className="help">
-        <header className="help__headr">
+        <header className="help__header">
           <h2 className="help__title-page">Описание работы</h2>
         </header>
         
@@ -105,8 +103,6 @@ export default function () {
             </p>
           </div>
         </div>
-       </section>
-    </Fragment>
-    
+      </section>
   )
 }
