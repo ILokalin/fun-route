@@ -2,6 +2,13 @@
   max-width: 1160px;
   margin: 0 auto;
   color: $WhiteElement-color;
+  padding-left: $Side-gap;
+  padding-right: $Side-gap;
+
+  @media (min-width: $Screen-max) {
+    padding: 0;
+    
+  }
 
   &__header {
     text-align: center;

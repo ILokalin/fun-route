@@ -16,14 +16,9 @@ export default class extends React.Component {
   }
 
   state = {
-    mapState: {
-      isLocationFound: false,
-      mapCenter: [55.72, 37.64],
-      mapZoom: 14,
-      routePointsArray: [],
-      currentPointCoords: [55.72, 37.64]
-    }
+    
   }
+
 
   onChangePage (mapState) {
     this.setState(state => ({

@@ -9,9 +9,21 @@
 
 
   &__rules-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    width: 100%;
+    display: inline-grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
     grid-gap: 50px;
+    justify-items: center;
+    align-items: center;
+
+
+    @media (min-width: $Screen-sd) {
+      grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+    }
+
+    @media (min-width: $Screen-md) {
+      grid-template-columns: repeat(auto-fill, minmax(400px, 500px)); 
+    }
   }
 
   &__card {
@@ -21,7 +33,7 @@
     align-items: center;
   }
 
-  &__title-common {
+  &__title-page {
     text-align: center;
     padding-bottom: 30px;
   }
@@ -29,12 +41,21 @@
 
   &__title {
     text-align: center;
-    padding-bottom: 20px;
+    padding-bottom: 50px;
   }
 
+  &__image-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: $Screen-max) {
+      height: 200px;
+    }
+  }
 
   &__image {
-    // float: left;
     border-radius: 4px;
     border: 1px solid $LightElement-color;
     margin-bottom: 30px;

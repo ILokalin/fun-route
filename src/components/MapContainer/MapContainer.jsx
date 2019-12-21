@@ -13,7 +13,6 @@ export default class extends React.PureComponent {
     this.ActiveElementColor = '#16A085';
     this.LightElementColor = '#798995';
     this.ItemBgColor = '#34495E';
-    this.startPoint = [55.72, 37.64];
     
     this.onAddPoint = this.onAddPoint.bind(this);
     this.onDeletePoint = this.onDeletePoint.bind(this);
@@ -29,7 +28,14 @@ export default class extends React.PureComponent {
   }
 
   static defaultProps = {
-    newSession: true
+    newSession: true,
+    mapState: {
+      isLocationFound: false,
+      mapCenter: [55.72, 37.64],
+      mapZoom: 14,
+      routePointsArray: [],
+      currentPointCoords: [55.72, 37.64]
+    }
   }
 
   state = {
@@ -42,7 +48,6 @@ export default class extends React.PureComponent {
 
   componentDidMount () {
     const { newSession} = this.props
-    debugger
 
     if (newSession) {
       window.addEventListener ('load', this.handleLoad());
@@ -410,7 +415,7 @@ export default class extends React.PureComponent {
    */
   async handleAddPoint (point) {
     const { coords, address, name } = point
-    debugger
+
     const numOfPoint = this.state.routePoints.length;
 
     const newPoint = new window.ymaps.Placemark (
@@ -614,7 +619,7 @@ export default class extends React.PureComponent {
       newRoute.forEach((placemark, i) => {
         placemark.properties
             .set({
-              iconContent: i < 10 ? String.fromCharCode(i + 65) : ''
+              iconContent: i < 26 ? String.fromCharCode(i + 65) : ''
             });
         placemark.geometry.num = i;
         this.routeCollection.add(placemark);

@@ -38,40 +38,130 @@ export default class extends React.PureComponent {
   onDragStart (event) {
     event.preventDefault();
 
-    const target = event.target;
+    const target = event.target,
+          targetWidth  = parseInt(getComputedStyle(target).width),
+          targetHeight = parseInt(getComputedStyle(target).height);
 
-    const targetWidth  = parseInt(getComputedStyle(target).width);
-    const targetHeight = parseInt(getComputedStyle(target).height);
-    target.style.width = targetWidth + 'px';
-    target.style.position = 'absolute';
-    target.style.zIndex = 10000;
+    // шаблон для вставки перенесенного элемента
+    const reservePositionForLanding = document.createElement('div');
+    reservePositionForLanding.style.height = '25px';
+    reservePositionForLanding.style.width = '100%';
+    reservePositionForLanding.classList.add('route__item--landing-position');
+
+    let currentItemForLanding, 
+        coordsLandingList;
 
     // резервируется место для возврата элемента
     const reservePositionElement = document.createElement('div');
     target.before(reservePositionElement);
+
+    // Фиксируем высоту списка с элементами для избежания скачков
+    const routeContainer = document.querySelector('.route');
+    routeContainer.style.height = `${routeContainer.getBoundingClientRect().height}px`;
+
+    // Выбранный элемент необходимо перезакрепить на document
+    target.style.width = targetWidth + 'px';
+    target.style.position = 'absolute';
+    target.style.zIndex = 10000;
+    target.style.borderRadius = '4px';
+
     document.body.append(target);
 
+    function loadLandingList () {
+      const itemsList = [...routeContainer.querySelectorAll('.route__item')];
+
+      coordsLandingList = itemsList.map(item => {
+      const bound = item.getBoundingClientRect();
+
+      return {
+        item: item,
+        x: bound.left,
+        y: bound.top,
+        width: bound.width,
+        height: bound.height
+      }
+    })
+    }
+
+    // корректировка текущего положения элемента относительно курсора 
     moveAt(event.pageX, event.pageY);
 
     /**
      * запись координат для абсолютного позиционирования элемента на экране
      */
     function moveAt (pageX, pageY) {
-      target.style.left = pageX - targetWidth  / 2 + 'px';
-      target.style.top  = pageY - targetHeight / 2 + 'px';
+      const x = pageX - targetWidth  / 2;
+      const y = pageY - targetHeight / 2;
 
-      const whereI = document.elementFromPoint(pageX - targetWidth  / 2 , pageY - targetHeight / 2  ).closest('.route__item');
-      if ( whereI ) {
-        console.log(whereI)
-      }
-      
+      target.style.left = `${x}px`;
+      target.style.top  = `${y}px`;
     }
 
 
     // Перемещение элемента за курсором мыши
     function onMouseMove(event) {
-      moveAt(event.pageX, event.pageY);
+      const {pageX, pageY, clientX, clientY } = event;
+
+      moveAt(pageX, pageY);
+
+      loadLandingList();
+
+      const checkCureentPosition = coordsLandingList.find(element => {
+        const top = element.y,
+              left = element.x,
+              bottom = element.y + element.height,
+              right = element.x + element.width;
+
+        if ((top <= clientY || top <= clientY + 2) && (bottom >= clientY || bottom >= clientY - 2)  && left <= clientX && right >= clientX ) {
+          return element;
+        } else {
+          return false;
+        }
+      })
+
+      if (checkCureentPosition) {
+        const {y, height} = checkCureentPosition;
+        if (currentItemForLanding && checkCureentPosition.item.dataset.index === currentItemForLanding.dataset.index) {
+          if (clientY > y + height / 2 && currentItemForLanding.position === 'before') {
+
+            currentItemForLanding.after(reservePositionForLanding);
+            currentItemForLanding.position = 'after';
+
+          } else if (clientY <= y + height / 2 && currentItemForLanding.position === 'after') {
+            currentItemForLanding.before(reservePositionForLanding);
+            currentItemForLanding.position = 'before';
+
+          }
+        } else {
+          if (clientY > y + height / 2) {
+            currentItemForLanding = checkCureentPosition.item;
+            currentItemForLanding.after(reservePositionForLanding);
+            currentItemForLanding.position = 'after';
+
+          } else {
+            currentItemForLanding = checkCureentPosition.item;
+            currentItemForLanding.before(reservePositionForLanding);
+            currentItemForLanding.position = 'before';
+
+          }
+        }
+      } else if (!checkCureentPosition) {
+        if (currentItemForLanding) {
+          const {top, left, bottom, right } = reservePositionForLanding.getBoundingClientRect();
+
+          if ((clientY >= top || clientY + 2 >= top ) && (clientY <= bottom || clientY - 2 <= bottom ) && clientX >= left && clientX <= right) {
+
+          } else { 
+            reservePositionForLanding.remove();
+            currentItemForLanding = false;
+          }
+        } else { 
+          reservePositionForLanding.remove();
+          currentItemForLanding = false;
+        }
+      }
     }
+
 
     /**
      * Нажатая кнопка мыши отжата
@@ -95,14 +185,19 @@ export default class extends React.PureComponent {
       target.style.zIndex = '';
       target.style.top = '';
       target.style.left = '';
+      target.style.borderRadius = '';
+      routeContainer.style.height = '';
 
-      const beforeItem = elementDropEnd.closest('.route__item');
-debugger
-      if (beforeItem) {
-        beforeItem.before(target);
+      if (currentItemForLanding) {
+        if (currentItemForLanding.position === 'before') {
+          currentItemForLanding.before(target);
+        } else {
+          currentItemForLanding.after(target);
+        }
+
         reservePositionElement.remove();
+        reservePositionForLanding.remove();
         this.props.newIndexFind(target.dataset.index)
-
       } else {
         const inRouteContainer = elementDropEnd.closest('.route');
 
@@ -113,11 +208,10 @@ debugger
 
         } else {
           reservePositionElement.before(target);
-
+          reservePositionElement.remove();
         }
-      }
 
-      reservePositionElement.remove()
+      }
     }
 
     // При выходе мыши за пределы экрана возвращаем элемент в его прежнюю позицию, отменяем перетаскивание
@@ -128,6 +222,8 @@ debugger
         target.style.zIndex = '';
         target.style.top = '';
         target.style.left = '';
+        target.style.borderRadius = '';
+        routeContainer.style.height = '';
 
         reservePositionElement.before(target);
         reservePositionElement.remove()

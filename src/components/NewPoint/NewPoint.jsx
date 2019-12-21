@@ -4,7 +4,6 @@ import CoordsToString from '../CoordsToString';
 import IconAdd from '../IconsBtn/IconAdd';
 
 
-
 export default class extends React.PureComponent {
   constructor (props) {
     super(props);
@@ -19,6 +18,7 @@ export default class extends React.PureComponent {
     placemarkAddress: PropTypes.string,
     currentCoords:    PropTypes.array
   }
+
 
   static defaultProps = {
     currentCoords:    [0,0],

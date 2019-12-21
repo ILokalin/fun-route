@@ -105,7 +105,7 @@ export default class extends React.PureComponent {
         {routePoints.map((point, index) =>  <RoutePoint   
                                               point = {point}
                                               key   = {point.geometry.id} 
-                                              pointLetter   = {index < 10 ? String.fromCharCode(index + 65) : ''}
+                                              pointLetter   = {index < 26 ? String.fromCharCode(index + 65) : ''}
                                               newIndexFind  = {this.newIndexReady}
                                               />)}
       </ul>
