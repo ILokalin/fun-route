@@ -4,7 +4,7 @@
   position: relative;
   grid-template-columns: 2.1875rem calc(100% - 5.375rem) 3.1875rem;
   align-items: center;
-  border: 1px solid $LightElement-color;
+  border: 0.0625rem solid $LightElement-color;
   border-radius: 0.25rem;
   background-color: $ContainerBg-color;
   padding-left: 1rem;
@@ -12,11 +12,6 @@
   height: 3.5rem;
   user-select: none;
 
-
-  & .icon {
-    width: 30px;
-    height: 30px;
-  }
 
   &__caption {
     padding-right: 0.625rem;
@@ -27,56 +22,57 @@
     color: $WhiteElement-color;
   }
 
+
   &__label {
     position: relative;
     cursor: pointer;
-    height: 30px;
+    height: 1.875rem;
 
-    & .icon {
+    &:hover {
+      .icon{
+        transform: rotate(90deg);
+      }
+
+      .icon__path {
+        fill: $ActiveElement-color;
+      }
+    }
+
+    .icon {
       left: 0;
       position: absolute;
       fill: $LightElement-color;
       transition-duration: 0.3s;
       transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     }
-
-    &:hover .icon{
-      transform: rotate(90deg);
-      transition-duration: 0.3s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-
-    &:hover .icon__path {
-      fill: $ActiveElement-color;
-    }
   }
+
 
   &__toggle {
     cursor: pointer;
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     overflow: hidden;
     clip: rect(0 0 0 0);
     visibility: hidden;
 
-    &:checked ~ .route-type__toggle-marker:before {
-      background-color: $WhiteElement-color;
-    }
+    &:checked {
 
-    &:checked ~ .icon {
-      left: 14px;
-      transition-duration: 0.3s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
+      ~ .route-type__toggle-marker:before {
+        background-color: $WhiteElement-color;
+      }
 
-    &:checked ~ .icon .icon__path {
-      fill: $ActiveElement-color;
-    }
+      ~ .icon {
+        left: 0.875rem;
+      }
 
-    &:checked ~ .route-type__toggle-marker:after {
-      left: 14px;
-      transition-duration: 0.3s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+      ~ .icon .icon__path {
+        fill: $ActiveElement-color;
+      }
+
+      ~ .route-type__toggle-marker:after {
+        left: 0.875rem;
+      }
     }
   }
 
@@ -85,13 +81,13 @@
 
     &:before {
       position: absolute;
-      left: 5px;
-      top: 7px;
+      left: 0.3125rem;
+      top: 0.4375rem;
       border: 0.125rem solid $LightElement-color;
       border-radius: 1rem;
       box-shadow: 0 0.4375rem 1.25rem rgba(0, 0, 0, 0.07);
       width: 1.875rem;
-      height: 12px;
+      height: 0.75rem;
       content: '';
     }
 
@@ -106,8 +102,13 @@
     border-radius: 50%;
     background-color: $ItemBg-color;
     width: 1.8125rem;
-    height: 29px;
+    height: 1.8125rem;
     }
+  }
+
+  .icon {
+    width: 1.875rem;
+    height: 1.875rem;
   }
 }
 

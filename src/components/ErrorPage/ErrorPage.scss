@@ -7,7 +7,6 @@
 
   @media (min-width: $Screen-max) {
     padding: 0;
-    
   }
 
   &__header {
@@ -22,5 +21,10 @@
   &__link {
     display: block;
     color: $LightElement-color;
+    transition: all 0.3s linear;
+
+    &:hover {
+      color: $ActiveElement-color;
+    }
   }
 }

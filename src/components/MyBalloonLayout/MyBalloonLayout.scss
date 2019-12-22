@@ -3,42 +3,41 @@
   top: 0;
   left: 0;
   z-index: 1010;
-  margin-top: -10px;
+  margin-top: -0.625rem;
   border: 1px solid rgba(120,120,80,0.3);
-  border-radius: 6px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.3125rem 0.625rem rgba(0,0,0,0.2);
   background-clip: padding-box;
   background-color: #fff;
-  padding: 1px;
-  max-width: 276px;
+  padding: 0.0625rem;
+  max-width: 17.25rem;
   text-align: left;
   white-space: normal;
 
   &__title {
     margin: 0;
-    border-bottom: 1px solid #ebebeb;
-    border-radius: 5px 5px 0 0;
+    border-bottom: 0.0625rem solid #ebebeb;
+    border-radius: 0.3125rem 0.3125rem 0 0;
     background-color: #f7f7f7;
-    padding: 8px 14px;
-    line-height: 18px;
+    padding: 0.5rem 0.875rem;
+    line-height: 1.125rem;
     color: $ContainerBg-color;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: bold;
-    -moz-border-radius: 5px 5px 0 0;
-    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 0.3125rem 0.3125rem 0 0;
   }
 
   &__content {
-    padding: 9px 14px;
+    padding: 0.5625rem 0.875rem;
   }
 
   &__arrow {
     display: block;
     position: absolute;
-    bottom: -11px;
+    bottom: -0.6875rem;
     left: 50%;
-    margin-left: -9px;
-    border-width: 11px;
+    margin-left: -0.5625rem;
+    border-width: 0.6875rem;
     border-bottom-width: 0;
     border-style: solid;
     border-color: transparent;
@@ -49,9 +48,9 @@
     &::after {
       display: block;
       position: absolute;
-      bottom: 1px;
-      margin-left: -10px;
-      border-width: 10px;
+      bottom: 0.0625rem;
+      margin-left: -0.625rem;
+      border-width: 0.625rem;
       border-bottom-width: 0;
       border-style: solid;
       border-color: transparent;
@@ -64,23 +63,23 @@
 
   .popover__close {
     position: absolute;
-    top: 1px;
-    right: 5px;
+    top: 0.0625rem;
+    right: 0.3125rem;
     float: right;
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    opacity: .2;
+    opacity: .5;
     text-decoration: none;
-    text-shadow: 0 1px 0 #fff;
-    line-height: 20px;
-    color: #000;
-    font-size: 20px;
+    text-shadow: 0 0.0625rem 0 #fff;
+    line-height: 1.25rem;
+    color: $LightElement-color;
+    font-size: 1.25rem;
     font-weight: bold;
 
     &:hover {
       transform: rotate(90deg);
-      transition-duration: 0.3s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+      opacity: 1;
+      color: $ActiveElement-color;
     }
   }
 }

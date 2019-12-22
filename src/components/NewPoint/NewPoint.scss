@@ -72,23 +72,23 @@
 
     &:disabled {
       opacity: 0.5;
-    }
 
-    &:disabled:hover {
-      transform: none;
-    }
+      &:hover {
+        transform: none;
+      }
 
-    &:disabled:active .icon__path {
-      opacity: 1;
-      fill: $WhiteElement-color;
+      &:active .icon__path {
+        opacity: 1;
+        fill: $WhiteElement-color;
+      }
     }
   }
 
   &__description {
-    padding-top: 5px;
-    line-height: 12px;
+    padding-top: 0.3125rem;
+    line-height: 0.75rem;
     color: $LightElement-color;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 }
 

@@ -3,7 +3,7 @@
   background-color: $BodyBg-color;
   width: 100%;
   height: 4.0625rem;
-  grid-template-columns: minmax($Side-gap, 1fr) minmax(290px, 450px) minmax($Side-gap, 1fr);
+  grid-template-columns: minmax($Side-gap, 1fr) minmax(18.125rem, 28.125rem) minmax($Side-gap, 1fr);
   grid-template-areas:  "  .   up-line    .  "
                         " line   line   line ";
 
@@ -12,7 +12,7 @@
   }
 
   @media (min-width: $Screen-max) {
-    grid-template-columns: 1fr 1440px 1fr;
+    grid-template-columns: 1fr 90rem 1fr;
   }
 
 
@@ -23,19 +23,16 @@
     justify-content: space-between;
     margin: 0 auto;
     width: 100%;
-
-    @media (min-width: $Screen-md) {
-      padding-right: 16px;
-    }
   }
 
 
   &__logo {
     transform: translateY(14px);
+    transition: all 0.3s linear;
     z-index: 10000;
     cursor: pointer;
     width: 100%;
-    max-width: 200px;
+    max-width: 12.5rem;
     overflow: visible;
     text-decoration: none;
     text-shadow: 0px 0.25rem 0.3125rem rgba(0, 0, 0, 0.2);
@@ -45,36 +42,40 @@
     font-size: 2.25rem;
     font-weight: bold;
     user-select: none;
+
+    &:hover {
+      opacity: 1;
+      color: $ActiveElement-color;
+    }
+
+    &:active {
+      opacity: 0.2;
+      color: $LightElement-color;
+    }
   }
 
   &__help {
     transform: translateY(24px);  
-    transition-delay: 0.2s;
-    transition-duration: 0.3s;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    opacity: 0.5;
+    transition: all 0.3s linear;
+    opacity: 0.3;
     background-color: transparent;
     cursor: pointer;
     padding: 0;
-    height: 30px;
+    height: 1.875rem;
     vertical-align: middle;
     text-decoration: none;
     color: $LightElement-color;
     font-family: $font-family;
-    font-size: 18px;
+    font-size: 1.125rem;
+    font-weight: bold;
 
     &:hover {
-      transition-delay: 0.2s;
-      transition-duration: 0.3s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
       opacity: 1;
       color: $ActiveElement-color;
-      font-weight: bold;
+
     }
 
     &:active {
-      transition-duration: 0.3s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
       opacity: 0.2;
       color: $LightElement-color;
     }
@@ -83,7 +84,7 @@
 
   &__decor-line {
     grid-area: line;
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2), 0px 3px 14px rgba(0, 0, 0, 0.12), 0px 8px 10px rgba(0, 0, 0, 0.14);
+    box-shadow: 0rem 0.25rem 0.3125rem rgba(0, 0, 0, 0.2), 0px 0.1875rem 0.875rem rgba(0, 0, 0, 0.12), 0rem 0.5rem 0.625rem rgba(0, 0, 0, 0.14);
     background-color: $ActiveElement-color;
     width: 100%;
     height: 0.75rem;

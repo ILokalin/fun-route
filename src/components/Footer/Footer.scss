@@ -5,6 +5,7 @@
   .footer__link {
     color: $WhiteElement-color;
     text-decoration: none;
+    transition: all 0.3s linear;
 
     &:hover {
       color: $ActiveElement-color;
