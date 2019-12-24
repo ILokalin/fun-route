@@ -1,108 +1,70 @@
-import React, { Fragment } from 'react';
-import SetNewPointMapImage from '../../assets/set-new-point-map.jpg';
-import AddNewPointButtonImage from '../../assets/add-new-point-button.jpg';
-import StartEndPointsInRoutImage from '../../assets/start-end-points-in-route.jpg';
-import PlacemarkAddressRouteImage from '../../assets/placemark-address-route.jpg';
-import ButtonsUpDownImage from '../../assets/buttons-up-down.jpg';
-import RouteTypeButton from '../../assets/route-type-button.jpg';
-import ButtonRemoveImage from '../../assets/button-remove.jpg';
+import React from 'react';
+import HelpCard from 'components/HelpCard';
 
-import IconRemove from '../IconsBtn/IconRemove';
-import IconAdd from '../IconsBtn/IconAdd';
+import SetNewPointMapImage from 'assets/set-new-point-map.jpg';
+import AddNewPointButtonImage from 'assets/add-new-point-button.jpg';
+import StartEndPointsInRoutImage from 'assets/start-end-points-in-route.jpg';
+import PlacemarkAddressRouteImage from 'assets/placemark-address-route.jpg';
+import ButtonsUpDownImage from 'assets/buttons-up-down.jpg';
+import RouteTypeButton from 'assets/route-type-button.jpg';
+import ButtonRemoveImage from 'assets/button-remove.jpg';
+
+import IconRemove from 'components/IconsBtn/IconRemove';
+import IconAdd from 'components/IconsBtn/IconAdd';
 
 
-export default function () {
-  return (
+export default class extends React.Component {
+
+  render () {
+
+    const help = [
+      {
+        title: 'Выбор точки',
+        image: SetNewPointMapImage,
+        text: ["Для начала работы необходимо выбрать место начала ма\u00adршрута на карте и уста\u00adновить маркер. Маркер можно установить пере\u00adтаски\u00adва\u00adнием маркера из центра карты или кликнув в нужной точке ка\u00adрты левой клавишей мыши."]
+      }, {
+        title: 'Добавление точки',
+        image: AddNewPointButtonImage,
+        text: ['Адрес отобразится в поле создания новой точки маршрута. В поле можно указать свое название для точки (адрес сохра\u00adнится и будет также указан), уточнить координаты. Для добавления точки необходимо нажать кнопку', IconAdd(), 'или клавишу Enter в поле для ввода текста.']
+      }, {
+        title: 'Список маршрута',
+        image: StartEndPointsInRoutImage,
+        text: ['Добавляя точки, их описание (адрес, название) разме\u00adщаются в списке.  Первые 10 получают литер от A до J. В случае, когда название или адрес не помещаются в ширину отведенного поля, можно получить разве\u00adрнутую информацию о точке маршрута, выделив точку левой кнопкой мыши.']
+      }, {
+        title: 'Маркеры на карте',
+        image: PlacemarkAddressRouteImage,
+        text: ['Для каждой точки на карте создается круглый маркер, место\u00adположение соответствует координатам (широта, долгота). Нажав на маркер, откры\u00adвается текущий адрес в соответствии с гео\u00adкодиро\u00adванием сервиса Яндекс-карты. Добавьте начальную и конечную точку маршрута в списке.']
+      }, {
+        title: 'Изменение последовательности',
+        image: ButtonsUpDownImage,
+        text: ['Для изменения последовательности маршрута можно пере\u00adта\u00adскивать элементы в списке, размещая их нужном порядке. Также, можно воспользоваться кнопками, которые открываются при наведении указателя мыши на элемент. В мобильной версии кнопки для пере\u00adмещения вверх/вниз открыты всегда, а литеры точек, в списке не указываются.']
+      }, {
+        title: 'Удаление точки',
+        image: ButtonRemoveImage,
+        text: ['Удалить точку из маршрута можно нажатием кнопки', IconRemove(), 'нахо\u00adдя\u00adщейся у каждого элемента в списке. Отменить удаление нево\u00adзможно.']
+      }, {
+        title: 'Режимы отображения маршрута',
+        image: RouteTypeButton,
+        text: ['Составленный маршрут можно представить в виде проло\u00adженного пути. Для этого необходимо переключить режим, выбрав “Показать маршрут на карте”. Вернуться в режим редактирования, можно установив переключатель в обра\u00adтное положение.']
+      }]
+
+    return (
       <section className="help">
-        <header className="help__header">
-          <h2 className="help__title-page">Описание работы</h2>
-        </header>
+        <h2 className="help__title-page">Описание работы</h2>
         
         <div className="help__rules-container">
-          <div className="help__card">
-            <h3 className="help__title">Выбор точки</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={SetNewPointMapImage} alt="установка маркера" />
-            </div>
-            <p className="help__text" align="justify">
-              Для начала работы необходимо выбрать место начала ма&shy;ршрута на карте и уста&shy;новить 
-              маркер. Маркер можно установить пере&shy;таски&shy;ва&shy;нием маркера из центра карты или кликнув в нужной 
-              точке ка&shy;рты левой клавишей мыши.
-            </p>
-          </div>
-          
-          <div className="help__card">
-            <h3 className="help__title">Добавление точки</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={AddNewPointButtonImage} alt="добавление точки" />
-            </div>
-            <p className="help__text" align="justify">
-              Адрес отобразится в поле создания новой точки маршрута. В поле можно указать свое 
-              название для точки (адрес сохра&shy;нится и будет также указан), уточнить координаты. Для добавления 
-              точки необходимо нажать кнопку <IconAdd /> или клавишу Enter в поле для ввода текста.
-            </p>
-          </div>
+          {help.map((element, index) => <HelpCard 
+                                      key = {index.toString()}
+                                      title = {element.title}
+                                      image = {element.image}
+                                      text = {element.text}
+                                      />
+          )}
   
-          <div className="help__card">
-            <h3 className="help__title">Список маршрута</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={StartEndPointsInRoutImage} alt="маршрут в списке" />
-            </div>
-            <p className="help__text" align="justify">
-              Добавляя точки, их описание (адрес, название) разме&shy;щаются в списке.  Первые 10 получают 
-              литер от A до J. В случае, когда название или адрес не помещаются в ширину отведенного поля, 
-              можно получить разве&shy;рнутую информацию о точке маршрута, выделив точку левой кнопкой мыши.
-            </p>
-          </div>
-  
-          <div className="help__card">
-            <h3 className="help__title">Маркеры на карте</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={PlacemarkAddressRouteImage} alt="маркер с адресом" />
-            </div>
-            <p className="help__text" align="justify">
-              Для каждой точки на карте создается круглый маркер, место&shy;положение соответствует 
-              координатам (широта, долгота). Нажав на маркер, откры&shy;вается текущий адрес в соответствии с 
-              гео&shy;кодиро&shy;ванием сервиса Яндекс-карты. Добавьте начальную и конечную точку маршрута в списке.
-            </p>
-          </div>
-  
-          <div className="help__card">
-            <h3 className="help__title">Изменение последовательности</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={ButtonsUpDownImage} alt="кнопки пермещения" />
-            </div>
-            <p className="help__text" align="justify">
-              Для изменения последовательности маршрута можно перетаскивать элементы в списке, размещая их 
-              нужном порядке. Также, можно воспользоваться кнопками, которые открываются при наведении 
-              указателя мыши на элемент. В мобильной версии кнопки для пере&shy;мещения вверх/вниз открыты всегда, 
-              а литеры точек, в списке не указываются.
-            </p>
-          </div>
-  
-          <div className="help__card">
-            <h3 className="help__title">Удаление точки</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={ButtonRemoveImage} alt="кнопка удаления" />
-            </div>
-            <p className="help__text" align="justify">
-              Удалить точку из маршрута можно нажатием кнопки <IconRemove /> нахо&shy;дя&shy;щейся у каждого элемента в списке. 
-              Отменить удаление нево&shy;зможно.
-            </p>
-          </div>
-  
-          <div className="help__card">
-            <h3 className="help__title">Режимы отображения маршрута</h3>
-            <div className="help__image-section">
-              <img className="help__image" src={RouteTypeButton} alt="кнопки пермещения" />
-            </div>
-            <p className="help__text" align="justify">
-              Составленный маршрут можно представить в виде проло&shy;женного пути. Для этого необходимо переключить режим, 
-              выбрав “Показать маршрут на карте”. Вернуться в режим редактирования, можно установив переключатель в 
-              обра&shy;тное положение.
-            </p>
-          </div>
         </div>
       </section>
   )
+
+  } 
 }
+  

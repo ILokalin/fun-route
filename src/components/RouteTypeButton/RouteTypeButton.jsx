@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconRound from '../IconsBtn/IconRound';
-import IconRoute from '../IconsBtn/IconRoute';
+import IconRound from 'components/IconsBtn/IconRound';
+import IconRoute from 'components/IconsBtn/IconRoute';
 
 
 export default class extends React.PureComponent {

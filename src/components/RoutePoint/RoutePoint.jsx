@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CoordsToString from '../CoordsToString';
-import IconDown from '../IconsBtn/IconDown';
-import IconRemove from '../IconsBtn/IconRemove';
-import IconUp from '../IconsBtn/IconUp';
+import CoordsToString from 'components/CoordsToString';
+import IconDown from 'components/IconsBtn/IconDown';
+import IconRemove from 'components/IconsBtn/IconRemove';
+import IconUp from 'components/IconsBtn/IconUp';
 
 
 

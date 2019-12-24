@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import Map from '../Map';
-import NewPoint from '../NewPoint';
-import RouteContainer from '../RouteContainer';
-import RouteTypeButton from '../RouteTypeButton';
+import Map from 'components/Map';
+import NewPoint from 'components/NewPoint';
+import RouteContainer from 'components/RouteContainer';
+import RouteTypeButton from 'components/RouteTypeButton';
 import PropTypes from 'prop-types';
 
 
@@ -346,7 +346,7 @@ export default class extends React.PureComponent {
                 : firstGeoObject.getCountry(),
             firstGeoObject.getThoroughfare() || firstGeoObject.getPremise(),
             firstGeoObject.getPremiseNumber()
-            ].filter(Boolean).join(',').split(',').join(', ');
+            ].filter(Boolean).join(', ');
 
           newPlacemark.properties
             .set({

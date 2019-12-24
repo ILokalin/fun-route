@@ -37,11 +37,12 @@ export default class extends React.Component {
           </header>
           <main className="app__main">
             <Switch>
-              <Route path = '/' component = {() => <MapContainer
-                                                      mapState = { this.state.mapState }
-                                                      newSession = { this.state.newSession }
-                                                      onChangePage = { this.onChangePage }
-                                                      /> } exact />
+              <Route exact path = '/' component = {() => <MapContainer
+                                                          mapState = { this.state.mapState }
+                                                          newSession = { this.state.newSession }
+                                                          onChangePage = { this.onChangePage }
+                                                          />} 
+                                                          />
               <Route path = '/help' component = { HelpPage } />
               <ErrorPage path="*" />
             </Switch>
@@ -52,6 +53,5 @@ export default class extends React.Component {
         </div>    
       </BrowserRouter>
     );
-
   }
 }

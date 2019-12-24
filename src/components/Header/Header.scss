@@ -79,6 +79,11 @@
       opacity: 0.2;
       color: $LightElement-color;
     }
+
+    &.active {
+      opacity: 1;
+      color: $ActiveElement-color;
+    }
   }
 
 
@@ -90,5 +95,7 @@
     height: 0.75rem;
   }
 }
+
+
 
 

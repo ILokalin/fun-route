@@ -1,9 +1,9 @@
 import React from 'react';
 
 
-export default class extends React.PureComponent {
-  render () {
-    return (
+export default function () {
+
+  return (
       <svg className="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30">
   <defs/>
   <g  clipPath="url(#clip0)">
@@ -17,7 +17,7 @@ export default class extends React.PureComponent {
 </svg>
     )
   }
-}
+
 
 
 

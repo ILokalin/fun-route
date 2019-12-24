@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RoutePoint from '../RoutePoint';
+import RoutePoint from 'components/RoutePoint';
 
 
 

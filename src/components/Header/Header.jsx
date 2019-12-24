@@ -8,10 +8,10 @@ export default class extends React.Component {
     
     return (
       <div className="header">
-        <div className="header__up-line">
-          <NavLink to="/" className="header__logo">FunRoute#</NavLink>
+        <nav className="header__up-line">
+          <NavLink exact to="/" className="header__logo">FunRoute#</NavLink>
           <NavLink to="/help" className="header__help" >Help</NavLink>
-        </div>
+        </nav>
         <div className="header__decor-line"></div>
       </div>
       )
