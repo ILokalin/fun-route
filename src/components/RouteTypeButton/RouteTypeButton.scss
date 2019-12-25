@@ -4,9 +4,9 @@
   position: relative;
   grid-template-columns: 2.1875rem calc(100% - 5.375rem) 3.1875rem;
   align-items: center;
-  border: 0.0625rem solid $LightElement-color;
+  border: 0.0625rem solid $color-secondary;
   border-radius: 0.25rem;
-  background-color: $ContainerBg-color;
+  background-color: $color-container-bg;
   padding-left: 1rem;
   width: 100%;
   height: 3.5rem;
@@ -19,7 +19,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; 
-    color: $WhiteElement-color;
+    color: $gray-lightnes;
   }
 
 
@@ -34,14 +34,14 @@
       }
 
       .icon__path {
-        fill: $ActiveElement-color;
+        fill: $color-main;
       }
     }
 
     .icon {
       left: 0;
       position: absolute;
-      fill: $LightElement-color;
+      fill: $color-secondary;
       transition-duration: 0.3s;
       transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     }
@@ -59,7 +59,7 @@
     &:checked {
 
       ~ .route-type__toggle-marker:before {
-        background-color: $WhiteElement-color;
+        background-color: $gray-lightnes;
       }
 
       ~ .icon {
@@ -67,7 +67,7 @@
       }
 
       ~ .icon .icon__path {
-        fill: $ActiveElement-color;
+        fill: $color-main;
       }
 
       ~ .route-type__toggle-marker:after {
@@ -83,7 +83,7 @@
       position: absolute;
       left: 0.3125rem;
       top: 0.4375rem;
-      border: 0.125rem solid $LightElement-color;
+      border: 0.125rem solid $color-secondary;
       border-radius: 1rem;
       box-shadow: 0 0.4375rem 1.25rem rgba(0, 0, 0, 0.07);
       width: 1.875rem;
@@ -100,7 +100,7 @@
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     border-radius: 50%;
-    background-color: $ItemBg-color;
+    background-color: $color-item-bg;
     width: 1.8125rem;
     height: 1.8125rem;
     }

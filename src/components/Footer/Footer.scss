@@ -3,12 +3,12 @@
 
 
   .footer__link {
-    color: $WhiteElement-color;
+    color: $gray-lightnes;
     text-decoration: none;
     transition: all 0.3s linear;
 
     &:hover {
-      color: $ActiveElement-color;
+      color: $color-main;
     }
   }
 }

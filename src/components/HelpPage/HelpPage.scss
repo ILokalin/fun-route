@@ -1,11 +1,11 @@
 .help {
   margin: 0 auto;
   max-width: 72.5rem;
-  color: $WhiteElement-color;
+  color: $gray-lightnes;
   
   box-sizing: border-box;
-  padding-right: $Side-gap;
-  padding-left: $Side-gap;
+  padding-right: $side-gap;
+  padding-left: $side-gap;
 
 
   &__rules-container {
@@ -14,15 +14,15 @@
     grid-gap: 3.125rem;
     width: 100%;
 
-    @media (min-width: $Screen-sd) {
+    @media (min-width: $screen-sd) {
       grid-template-columns: minmax(23.125rem, 1fr);
     }
 
-    @media (min-width: $Screen-md) {
+    @media (min-width: $screen-md) {
       grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr)); 
     }
 
-    @media (min-width: $Screen-max) {
+    @media (min-width: $screen-max) {
       padding: 0;
     }
   }
@@ -43,7 +43,7 @@
     
     &:hover {
       .help__title {
-        color: $ActiveElement-color;
+        color: $color-main;
       }
     }
   }
@@ -65,15 +65,15 @@
     width: 80%;
     transition: background-color 0.8s 0.1s ease;
 
-    @media (min-width: $Screen-ld) {
-      background-color: $BodyBg-color;
+    @media (min-width: $screen-ld) {
+      background-color: $color-bg-body;
       height: 14.375rem;
     }
   }
 
 
   &__image {
-    border: 1px solid $LightElement-color;
+    border: 1px solid $color-secondary;
     border-radius: 0.25rem;
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(.76, 0, 1, 1);
@@ -88,12 +88,12 @@
     line-height: 1.5rem;
     hyphens: manual;
 
-    @media (min-width: $Screen-md) {
+    @media (min-width: $screen-md) {
       width: auto;
       margin: 0;
     }
 
-    @media (min-width: $Screen-sd) {
+    @media (min-width: $screen-sd) {
       max-width: 31.25rem;
     }
     
@@ -119,6 +119,6 @@
 
 
   & .icon__path { 
-    fill: $LightElement-color;
+    fill: $color-secondary;
   }
 }

@@ -6,9 +6,9 @@
   &__input {
     box-sizing: border-box;
     outline: none;
-    border: 1px solid $LightElement-color;
+    border: 1px solid $color-secondary;
     border-radius: 4px;
-    background-color: $ActiveElement-color;
+    background-color: $color-main;
     padding-top: 0.9375rem;
     padding-right: 3.25rem;
     padding-left: 1rem;
@@ -19,7 +19,7 @@
     font-size: 1rem;
 
     &::placeholder {
-      color:$WhiteElement-color;
+      color:$gray-lightnes;
     }
 
     &:disabled::placeholder,
@@ -36,7 +36,7 @@
     margin: 0;
     padding: 0;
     line-height: 0.75rem;
-    color: $ContainerBg-color;
+    color: $color-container-bg;
   }
 
 
@@ -79,7 +79,7 @@
 
       &:active .icon__path {
         opacity: 1;
-        fill: $WhiteElement-color;
+        fill: $gray-lightnes;
       }
     }
   }
@@ -87,7 +87,7 @@
   &__description {
     padding-top: 0.3125rem;
     line-height: 0.75rem;
-    color: $LightElement-color;
+    color: $color-secondary;
     font-size: 0.75rem;
   }
 }

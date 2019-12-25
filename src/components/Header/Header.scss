@@ -1,17 +1,17 @@
 .header {
   display: grid;
-  background-color: $BodyBg-color;
+  background-color: $color-bg-body;
   width: 100%;
   height: 4.0625rem;
-  grid-template-columns: minmax($Side-gap, 1fr) minmax(18.125rem, 28.125rem) minmax($Side-gap, 1fr);
+  grid-template-columns: minmax($side-gap, 1fr) minmax(18.125rem, 28.125rem) minmax($side-gap, 1fr);
   grid-template-areas:  "  .   up-line    .  "
                         " line   line   line ";
 
-  @media (min-width:  $Screen-md) {
-    grid-template-columns: $Side-gap minmax(20rem, 1fr) $Side-gap;
+  @media (min-width:  $screen-md) {
+    grid-template-columns: $side-gap minmax(20rem, 1fr) $side-gap;
   }
 
-  @media (min-width: $Screen-max) {
+  @media (min-width: $screen-max) {
     grid-template-columns: 1fr 90rem 1fr;
   }
 
@@ -37,25 +37,26 @@
     text-decoration: none;
     text-shadow: 0px 0.25rem 0.3125rem rgba(0, 0, 0, 0.2);
     line-height: 3rem;
-    color: $LightElement-color;
-    font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+    color: $color-secondary;
+    font-family: $font-roboto;
     font-size: 2.25rem;
     font-weight: bold;
     user-select: none;
 
     &:hover {
       opacity: 1;
-      color: $ActiveElement-color;
+      color: $color-main;
     }
 
     &:active {
       opacity: 0.2;
-      color: $LightElement-color;
+      color: $color-secondary;
     }
   }
 
-  &__help {
-    transform: translateY(24px);  
+
+  &__menu-item {
+    transform: translateY(24px); 
     transition: all 0.3s linear;
     opacity: 0.3;
     background-color: transparent;
@@ -64,25 +65,24 @@
     height: 1.875rem;
     vertical-align: middle;
     text-decoration: none;
-    color: $LightElement-color;
-    font-family: $font-family;
+    color: $color-secondary;
+    font-family: $font-roboto;
     font-size: 1.125rem;
     font-weight: bold;
 
     &:hover {
       opacity: 1;
-      color: $ActiveElement-color;
+      color: $color-main;
 
     }
 
     &:active {
       opacity: 0.2;
-      color: $LightElement-color;
+      color: $color-secondary;
     }
 
-    &.active {
-      opacity: 1;
-      color: $ActiveElement-color;
+    &--active {
+      display: none;
     }
   }
 
@@ -90,7 +90,7 @@
   &__decor-line {
     grid-area: line;
     box-shadow: 0rem 0.25rem 0.3125rem rgba(0, 0, 0, 0.2), 0px 0.1875rem 0.875rem rgba(0, 0, 0, 0.12), 0rem 0.5rem 0.625rem rgba(0, 0, 0, 0.14);
-    background-color: $ActiveElement-color;
+    background-color: $color-main;
     width: 100%;
     height: 0.75rem;
   }

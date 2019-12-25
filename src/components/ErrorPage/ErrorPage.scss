@@ -1,30 +1,62 @@
 .error-page {
   max-width: 1160px;
   margin: 0 auto;
-  color: $WhiteElement-color;
-  padding-left: $Side-gap;
-  padding-right: $Side-gap;
+  color: $gray-lightnes;
+  padding-left: $side-gap;
+  padding-right: $side-gap;
 
-  @media (min-width: $Screen-max) {
+  @media (min-width: $screen-max) {
     padding: 0;
   }
 
+
   &__header {
     text-align: center;
-    padding-bottom: 50px;
+    padding-bottom: 6.25rem;
   }
 
-  &__text {
-    line-height: 30px;
+  &__title {
+    color: $color-secondary;
+    opacity: 0.5;
   }
+
+
+  &__text {
+    margin: 0 auto;
+    width: 18.75rem;
+    line-height: 1.875rem;
+
+    @media (min-width: $screen-sd) {
+      width: 37.5rem;
+    }
+  }
+
 
   &__link {
     display: block;
-    color: $LightElement-color;
+    color: $color-secondary;
     transition: all 0.3s linear;
+    
 
     &:hover {
-      color: $ActiveElement-color;
+      color: $color-main;
+    }
+  }
+
+
+  &__number-404 {
+    width: 100%;
+    padding-top: 6.25rem;
+    font-size: 3rem;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    color: $color-secondary;
+    opacity: 0.5;
+    padding-bottom: 2rem;
+
+    &--big {
+      font-size: 4rem;
     }
   }
 }

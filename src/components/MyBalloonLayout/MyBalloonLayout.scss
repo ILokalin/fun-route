@@ -21,7 +21,7 @@
     background-color: #f7f7f7;
     padding: 0.5rem 0.875rem;
     line-height: 1.125rem;
-    color: $ContainerBg-color;
+    color: $color-container-bg;
     font-size: 0.875rem;
     font-weight: bold;
     border-radius: 0.3125rem 0.3125rem 0 0;
@@ -72,14 +72,14 @@
     text-decoration: none;
     text-shadow: 0 0.0625rem 0 #fff;
     line-height: 1.25rem;
-    color: $LightElement-color;
+    color: $color-secondary;
     font-size: 1.25rem;
     font-weight: bold;
 
     &:hover {
       transform: rotate(90deg);
       opacity: 1;
-      color: $ActiveElement-color;
+      color: $color-main;
     }
   }
 }
