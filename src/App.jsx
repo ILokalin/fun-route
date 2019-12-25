@@ -1,18 +1,21 @@
 import React from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from 'components/Header';
+import Footer from 'components/Footer';
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import MapContainer from './components/MapContainer';
-import HelpPage from './components/HelpPage';
-import ErrorPage from './components/ErrorPage';
+import MapContainer from 'components/MapContainer';
+import HelpPage from 'components/HelpPage';
+import ErrorPage from 'components/ErrorPage';
+
 
 export default class extends React.Component {
   constructor () {
     super();
 
     this.onChangePage = this.onChangePage.bind(this);
+
+    this.browserHistory = BrowserRouter.browserHistory;
   }
 
   state = {
@@ -37,7 +40,7 @@ export default class extends React.Component {
 
   render () {
     return (
-      <BrowserRouter>
+      <BrowserRouter history={this.browserHistory}>
         <div className="app">
           <header className="app__header">
             <Header />

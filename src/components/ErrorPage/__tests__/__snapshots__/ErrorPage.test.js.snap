@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorPage Component render snap 1`] = `
+<section
+  className="error-page"
+>
+  <header
+    className="error-page__header"
+  >
+    <h2
+      className="error-page__title"
+    >
+      Несуществующая страница
+    </h2>
+  </header>
+  <p
+    className="error-page__text"
+  >
+    Страница есть... информации нет. Чтобы вернуться в приложение перейдите по ссылке:
+    <a
+      className="error-page__link"
+      href="/"
+      onClick={[Function]}
+    >
+      Вернуться в приложение
+    </a>
+  </p>
+</section>
+`;

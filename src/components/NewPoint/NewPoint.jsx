@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import CoordsToString from '../CoordsToString';
-import IconAdd from '../IconsBtn/IconAdd';
+import CoordsToString from 'components/CoordsToString';
+import IconAdd from 'components/IconsBtn/IconAdd';
 
 
 export default class extends React.PureComponent {
