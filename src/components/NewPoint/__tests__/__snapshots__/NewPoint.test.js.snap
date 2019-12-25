@@ -4,22 +4,24 @@ exports[`New point field Component create render snap 1`] = `
 <div
   className="new-point"
 >
-  <h3
-    className="new-point__caption"
-  >
-    Назовите новую точку
-  </h3>
   <input
     autoComplete="off"
     className="new-point__input"
+    disabled="disabled"
     name="address"
     onKeyDown={[Function]}
     placeholder="Тестовая строка"
     title="Добавьте точку в маршрут"
     type="text"
   />
+  <h3
+    className="new-point__caption"
+  >
+    Назовите новую точку
+  </h3>
   <button
     className="new-point__add-button"
+    disabled="disabled"
     onClick={[Function]}
     type="button"
   >

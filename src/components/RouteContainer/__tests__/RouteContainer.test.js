@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import rendrer from 'react-test-renderer';
-import RouteContainer from "../RouteContainer/RouteContainer";
+
+import RouteContainer from 'components/RouteContainer';
 
 
 describe('RouteContainer Component', () => {

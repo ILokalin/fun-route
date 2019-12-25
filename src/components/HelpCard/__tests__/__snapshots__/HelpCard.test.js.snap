@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`New point field Component create render snap 1`] = `
+<div
+  className="help__card"
+>
+  <h3
+    className="help__title"
+  >
+    test title
+  </h3>
+  <div
+    className="help__image-section"
+  >
+    <img
+      alt="test title"
+      className="help__image"
+      src=""
+    />
+  </div>
+  <p
+    align="justify"
+    className="help__text"
+  >
+    test text first
+    test text second
+  </p>
+</div>
+`;

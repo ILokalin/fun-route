@@ -14,10 +14,17 @@ export default class extends React.PureComponent {
 
 
   static propTypes = {
-    routePoints:    PropTypes.array.isRequired,
+    routePoints:    PropTypes.array,
     onDeletePoint:  PropTypes.func.isRequired,
     onViewPoint:    PropTypes.func.isRequired,
-    onChangeSequence: PropTypes.func.isRequired
+    onChangeSequence: PropTypes.func.isRequired,
+  }
+  
+
+  static defaultProps = {
+    onDeletePoint: () => false,
+    onViewPoint: () => false,
+    onChangeSequence: () => false,
   }
 
 
@@ -36,7 +43,9 @@ export default class extends React.PureComponent {
 
     const button = target.closest('.route__item-button');
 
+    // если нажата одна из кнопок на элементе списка - Вверх/Вниз/Удалить
     if (typeof(button) !== 'undefined' && button) {
+
       if (button.value === 'up') {
         const position = this.positionIdInRoute(itemIndex);
         const newIndex = (position === 0) ? document.querySelectorAll('.route__item').length -1 : position - 1;
@@ -55,8 +64,14 @@ export default class extends React.PureComponent {
 
       const caption = target.closest('.route__item')
       
+      // Нажатие на элемент 
       if (typeof(caption) !== 'undefined' && caption)  {
 
+        /**
+         * Если элемент не был выделен до этого момента, то:
+         * снять возможное выделение других элементов, показать точку по центру карты
+         * Элемент будет выделен после выполенния условия.
+         */
         if (!caption.classList.contains('route__item--active')) {
           const deactivateList = [...caption.closest('.route').querySelectorAll('.route__item')]
 

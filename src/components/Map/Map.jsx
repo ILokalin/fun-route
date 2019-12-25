@@ -5,8 +5,13 @@ import PropTypes from 'prop-types';
 export default class extends React.Component {
 
   static propTypes = {
-  isLocationFound: PropTypes.bool.isRequired
+    isLocationFound: PropTypes.bool.isRequired
   }
+
+  static defaultProps = {
+    isLocationFound: false
+  }
+
 
   render () {
     const { isLocationFound } = this.props

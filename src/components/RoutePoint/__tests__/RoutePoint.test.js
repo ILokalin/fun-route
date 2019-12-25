@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import rendrer from 'react-test-renderer';
-import RoutePoint from '../../components/RoutePoint/RoutePoint';
+
+import RoutePoint from 'components/RoutePoint';
 
 const fakePoint = {
     name: 'Start test',

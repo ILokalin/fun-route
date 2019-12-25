@@ -35,16 +35,15 @@ afterAll(() => {
 })
 
 
-
-describe('New point field form', () => {
+describe('Functional test', () => {
   test('wait for hidden preloader', async () => {
-    await page.waitForSelector('.map-region__map--hidden');
+    await page.waitForSelector('.map-region__map');
     await page.waitFor(3000);
 
-    const mapRegion = await page.$('map-region__map--hidden');
+    const mapRegion = await page.$('.map-region__map--hidden');
 
     expect(mapRegion).toEqual(null)
-  }, 10000)
+  }, 20000)
 
 
   test('set start location', async () => {
@@ -101,9 +100,12 @@ describe('New point field form', () => {
     expect(oldAddressPoint === newAddressPoint).toEqual(false);
   }, 16000)
 
+
   test('user can change show type of route', async () => {
     await page.click('.route-type__toggle-marker');
+
   }, 16000)
+
 
   test('user can create point and reordering route', async () => {
     const address = faker.address.city();
@@ -125,14 +127,36 @@ describe('New point field form', () => {
 
     const routeItemText = await page.$$eval('.route__item-name', el => el[1].textContent);
     expect(address).toEqual(routeItemText);
-
   }, 16000)
+
+
+  test('user can change page', async () => {
+    await page.click('.header__help');
+
+    await page.waitForSelector('.help');
+    await page.waitForSelector('.help__card');
+  }, 16000)
+
+
+  test('user can  return to map page', async () => {
+    await page.click('.header__logo');
+
+    await page.waitForSelector('.map-region__map')
+    await page.waitFor(3000);
+
+    const mapRegion = await page.$('.map-region__map--hidden');
+
+    expect(mapRegion).toEqual(null)
+  }, 16000)
+
 
   test('user can delete all point', async () => {
     await page.$$eval('button[value=remove]', el => el[0].click())
     await page.$$eval('button[value=remove]', el => el[0].click())
     await page.$$eval('button[value=remove]', el => el[0].click())
   }, 16000)
+
+
 });
 
 

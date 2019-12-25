@@ -21,6 +21,8 @@ export default class extends React.PureComponent {
 
 
   static defaultProps = {
+    onAddPoint: () => false,
+    isLocationFound: false,
     currentCoords:    [0,0],
     placemarkAddress: ''
   }

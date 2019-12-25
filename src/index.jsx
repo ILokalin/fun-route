@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App';
-// import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
-// import MapContainer from './components/MapContainer';
-// import HelpPage from './components/HelpPage';
+import 'index.scss';
+import App from 'App';
 
 
 ReactDOM.render((

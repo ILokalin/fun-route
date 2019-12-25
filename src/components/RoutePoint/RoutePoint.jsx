@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import CoordsToString from 'components/CoordsToString';
+
 import IconDown from 'components/IconsBtn/IconDown';
 import IconRemove from 'components/IconsBtn/IconRemove';
 import IconUp from 'components/IconsBtn/IconUp';
@@ -16,8 +18,8 @@ export default class extends React.PureComponent {
 
 
   static routeType = {
-    point:        PropTypes.object.isRequired,
     newIndexFind: PropTypes.func.isRequired,
+    point:        PropTypes.object.isRequired,
     pointLetter:  PropTypes.string,
   }
 
@@ -39,14 +41,14 @@ export default class extends React.PureComponent {
     event.preventDefault();
 
     const target = event.target,
-          targetWidth  = parseInt(getComputedStyle(target).width),
-          targetHeight = parseInt(getComputedStyle(target).height);
+          targetHeight = parseInt(getComputedStyle(target).height),
+          targetWidth  = parseInt(getComputedStyle(target).width);
 
     // шаблон для вставки перенесенного элемента
     const reservePositionForLanding = document.createElement('div');
+    reservePositionForLanding.classList.add('route__item--landing-position');
     reservePositionForLanding.style.height = '25px';
     reservePositionForLanding.style.width = '100%';
-    reservePositionForLanding.classList.add('route__item--landing-position');
 
     let currentItemForLanding, 
         coordsLandingList;
@@ -60,25 +62,25 @@ export default class extends React.PureComponent {
     routeContainer.style.height = `${routeContainer.getBoundingClientRect().height}px`;
 
     // Выбранный элемент необходимо перезакрепить на document
-    target.style.width = targetWidth + 'px';
-    target.style.position = 'absolute';
-    target.style.zIndex = 10000;
     target.style.borderRadius = '4px';
+    target.style.position = 'absolute';
+    target.style.width = targetWidth + 'px';
+    target.style.zIndex = 10000;
 
     document.body.append(target);
 
-    function loadLandingList () {
+    const loadLandingList = () => {
       const itemsList = [...routeContainer.querySelectorAll('.route__item')];
 
       coordsLandingList = itemsList.map(item => {
       const bound = item.getBoundingClientRect();
 
       return {
+        width: bound.width,
+        height: bound.height,
         item: item,
         x: bound.left,
         y: bound.top,
-        width: bound.width,
-        height: bound.height
       }
     })
     }
@@ -87,7 +89,12 @@ export default class extends React.PureComponent {
     moveAt(event.pageX, event.pageY);
 
     /**
-     * запись координат для абсолютного позиционирования элемента на экране
+     * Запись координат для абсолютного позиционирования элемента на экране.
+     * Центр элемента принимает координаты мыши
+     *
+     * @function
+     * @name moveAt
+     * @params  {number, number} - pageX, pageY - положение курсора мыши на экране
      */
     function moveAt (pageX, pageY) {
       const x = pageX - targetWidth  / 2;
@@ -98,7 +105,19 @@ export default class extends React.PureComponent {
     }
 
 
-    // Перемещение элемента за курсором мыши
+    /**
+     * Отслеживание движение мыши с зажатой клавишей - перетаскивание элемента.
+     * 
+     * Задача: подсвечивать место для возможной вставки элемнта в список
+     *
+     * Используемые термины:
+     * Элемент - перетаскиваемый элемент из списка.
+     * Точка - маршрутная точка в спсике над которым происходит перенос ('.route__item')
+     * Список - имеющийся маршрут в классе '.route'
+     * @function
+     * @name onMouseMove
+     * @params {event.object} event - событие с текущими координатами мыши
+     */
     function onMouseMove(event) {
       const {pageX, pageY, clientX, clientY } = event;
 
@@ -106,22 +125,42 @@ export default class extends React.PureComponent {
 
       loadLandingList();
 
-      const checkCureentPosition = coordsLandingList.find(element => {
-        const top = element.y,
-              left = element.x,
-              bottom = element.y + element.height,
-              right = element.x + element.width;
+      const checkCureentPosition = coordsLandingList.find(point => {
+        const top = point.y,
+              left = point.x,
+              bottom = point.y + point.height,
+              right = point.x + point.width;
 
-        if ((top <= clientY || top <= clientY + 2) && (bottom >= clientY || bottom >= clientY - 2)  && left <= clientX && right >= clientX ) {
-          return element;
+        if ((top <= clientY + 2) && (bottom >= clientY - 2)  && left <= clientX && right >= clientX ) {
+
+          return point;
         } else {
+
           return false;
         }
       })
 
+
+      /**
+       * Проверка положения перетасикваемого элемента. 
+       *
+       * Во время перетаскивания элемента отслеживается его положение над другими точками маршрута в списке. 
+       * Разделяется несколько положений элемента:
+       * Элемент над списком и в верхней половине одной из точек - подсветить место вставки перед ней
+       * Элемент над списком и в нижней половине одной из точек - подсветить место вставик после нее
+       * 
+       * Элемент находится над подсветкой вставки - все остается без изменений
+       * Элемент не над списком и подсвечивтаь место вставки не надо - удаляется подсветка
+       */
       if (checkCureentPosition) {
         const {y, height} = checkCureentPosition;
+
+        /**
+         * Точка для посадки уже была выбрана && она прежняя - проверить расположение вставки, До или После точки
+         * Если сменилась точка над которой элемент, то определяется и устанвливается вид вставки - До/После
+         */
         if (currentItemForLanding && checkCureentPosition.item.dataset.index === currentItemForLanding.dataset.index) {
+          
           if (clientY > y + height / 2 && currentItemForLanding.position === 'before') {
 
             currentItemForLanding.after(reservePositionForLanding);
@@ -133,13 +172,13 @@ export default class extends React.PureComponent {
 
           }
         } else {
+          currentItemForLanding = checkCureentPosition.item;
+
           if (clientY > y + height / 2) {
-            currentItemForLanding = checkCureentPosition.item;
             currentItemForLanding.after(reservePositionForLanding);
             currentItemForLanding.position = 'after';
 
           } else {
-            currentItemForLanding = checkCureentPosition.item;
             currentItemForLanding.before(reservePositionForLanding);
             currentItemForLanding.position = 'before';
 
@@ -149,15 +188,16 @@ export default class extends React.PureComponent {
         if (currentItemForLanding) {
           const {top, left, bottom, right } = reservePositionForLanding.getBoundingClientRect();
 
-          if ((clientY >= top || clientY + 2 >= top ) && (clientY <= bottom || clientY - 2 <= bottom ) && clientX >= left && clientX <= right) {
-
-          } else { 
+          // Если НЕ над подсвеченным местом вставки - убрать подсветку 
+          if ( !((clientY + 2 >= top ) && (clientY - 2 <= bottom ) && clientX >= left && clientX <= right) ) {
             reservePositionForLanding.remove();
             currentItemForLanding = false;
-          }
+
+          } 
         } else { 
           reservePositionForLanding.remove();
           currentItemForLanding = false;
+
         }
       }
     }
@@ -165,10 +205,12 @@ export default class extends React.PureComponent {
 
     /**
      * Нажатая кнопка мыши отжата
+     *
      * Если элемент находится за пределами контейнера с маршрутом, то возвращаем
      * элемент на зарезервированное место и отменяем перенос
      * Если элемент находится над другим элементом маршрута, то читаем его id
      * ставим на новое место и вызываем событие для изменения последовательности
+     *
      * @function
      * @name    onMouseUp
      * @params  {object.event} event - событие мыши "кнопка отжата"
@@ -188,6 +230,14 @@ export default class extends React.PureComponent {
       target.style.borderRadius = '';
       routeContainer.style.height = '';
 
+
+      /** 
+       * Проверка позиции элемента в момент отжатия
+       * Ожидаемые варианты:
+       * Над точкой из списка - размесить переносимый элемент До или После точки
+       * Над контейнером для списка - разместить элемент в конце списка
+       * За пределами контейнера - вернуть элемент на прежнее место
+       */
       if (currentItemForLanding) {
         if (currentItemForLanding.position === 'before') {
           currentItemForLanding.before(target);
@@ -210,7 +260,6 @@ export default class extends React.PureComponent {
           reservePositionElement.before(target);
           reservePositionElement.remove();
         }
-
       }
     }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import rendrer from 'react-test-renderer';
-import RouteTypeButton from "../RouteTypeButton/RouteTypeButton"
+import RouteTypeButton from 'components/RouteTypeButton'
 
 
 describe('New point field Component create', () => {

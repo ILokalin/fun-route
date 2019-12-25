@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import CoordsToString from '../CoordsToString/CoordsToString';
+import CoordsToString from 'components/CoordsToString';
 
 
 test('Get string with coordinates', () => {

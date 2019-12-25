@@ -9,14 +9,21 @@ import HelpPage from './components/HelpPage';
 import ErrorPage from './components/ErrorPage';
 
 export default class extends React.Component {
-  constructor (props) {
-    super(props);
+  constructor () {
+    super();
 
     this.onChangePage = this.onChangePage.bind(this);
   }
 
   state = {
-    
+    newSession: true,
+    mapState: {
+      isLocationFound: false,
+      mapCenter: [55.72, 37.64],
+      mapZoom: 14,
+      routePointsArray: [],
+      currentPointCoords: [55.72, 37.64]
+    }
   }
 
 
