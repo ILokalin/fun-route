@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import rendrer from 'react-test-renderer';
+
 import Map from 'components/Map';
 
 
