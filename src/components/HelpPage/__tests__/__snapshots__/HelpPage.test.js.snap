@@ -13,49 +13,49 @@ exports[`HelpPage Component render snap 1`] = `
     className="help__rules-container"
   >
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Выбор точки
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Выбор точки"
-          className="help__image"
+          className="help-card__image"
           src="set-new-point-map.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Для начала работы необходимо выбрать место начала ма­ршрута на карте и уста­новить маркер. Маркер можно установить пере­таски­ва­нием маркера из центра карты или кликнув в нужной точке ка­рты левой клавишей мыши.
       </p>
     </div>
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Добавление точки
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Добавление точки"
-          className="help__image"
+          className="help-card__image"
           src="add-new-point-button.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Адрес отобразится в поле создания новой точки маршрута. В поле можно указать свое название для точки (адрес сохра­нится и будет также указан), уточнить координаты. Для добавления точки необходимо нажать кнопку
         <svg
@@ -81,97 +81,97 @@ exports[`HelpPage Component render snap 1`] = `
       </p>
     </div>
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Список маршрута
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Список маршрута"
-          className="help__image"
+          className="help-card__image"
           src="start-end-points-in-route.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Добавляя точки, их описание (адрес, название) разме­щаются в списке.  Первые 10 получают литер от A до J. В случае, когда название или адрес не помещаются в ширину отведенного поля, можно получить разве­рнутую информацию о точке маршрута, выделив точку левой кнопкой мыши.
       </p>
     </div>
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Маркеры на карте
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Маркеры на карте"
-          className="help__image"
+          className="help-card__image"
           src="placemark-address-route.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Для каждой точки на карте создается круглый маркер, место­положение соответствует координатам (широта, долгота). Нажав на маркер, откры­вается текущий адрес в соответствии с гео­кодиро­ванием сервиса Яндекс-карты. Добавьте начальную и конечную точку маршрута в списке.
       </p>
     </div>
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Изменение последовательности
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Изменение последовательности"
-          className="help__image"
+          className="help-card__image"
           src="buttons-up-down.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Для изменения последовательности маршрута можно пере­та­скивать элементы в списке, размещая их нужном порядке. Также, можно воспользоваться кнопками, которые открываются при наведении указателя мыши на элемент. В мобильной версии кнопки для пере­мещения вверх/вниз открыты всегда, а литеры точек, в списке не указываются.
       </p>
     </div>
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Удаление точки
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Удаление точки"
-          className="help__image"
+          className="help-card__image"
           src="button-remove.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Удалить точку из маршрута можно нажатием кнопки
         <svg
@@ -214,25 +214,25 @@ exports[`HelpPage Component render snap 1`] = `
       </p>
     </div>
     <div
-      className="help__card"
+      className="help-card"
     >
       <h3
-        className="help__title"
+        className="help-card__title"
       >
         Режимы отображения маршрута
       </h3>
       <div
-        className="help__image-section"
+        className="help-card__image-section"
       >
         <img
           alt="Режимы отображения маршрута"
-          className="help__image"
+          className="help-card__image"
           src="route-type-button.jpg"
         />
       </div>
       <p
         align="justify"
-        className="help__text"
+        className="help-card__text"
       >
         Составленный маршрут можно представить в виде проло­женного пути. Для этого необходимо переключить режим, выбрав “Показать маршрут на карте”. Вернуться в режим редактирования, можно установив переключатель в обра­тное положение.
       </p>

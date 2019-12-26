@@ -17,8 +17,3 @@ export default function () {
     </svg>
     )
   }
-
-
-
-
-

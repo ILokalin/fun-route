@@ -131,10 +131,10 @@ describe('Functional test', () => {
 
 
   test('user can change page', async () => {
-    await page.click('.header__help');
+    await page.click('.header__menu-item');
 
     await page.waitForSelector('.help');
-    await page.waitForSelector('.help__card');
+    await page.waitForSelector('.help-card');
   }, 16000)
 
 

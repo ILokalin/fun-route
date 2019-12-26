@@ -50,6 +50,4 @@ describe('RouteContainer Component', () => {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
     })
-
-
 })

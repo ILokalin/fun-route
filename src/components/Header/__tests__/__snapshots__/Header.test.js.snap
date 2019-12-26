@@ -8,19 +8,30 @@ exports[`Header component create render snap 1`] = `
     className="header__up-line"
   >
     <a
-      className="header__logo"
-      exact={true}
+      aria-current="page"
+      className="header__logo active"
       href="/"
       onClick={[Function]}
+      style={Object {}}
     >
       FunRoute#
     </a>
     <a
-      className="header__help"
+      aria-current={null}
+      className="header__menu-item"
       href="/help"
       onClick={[Function]}
     >
       Help
+    </a>
+    <a
+      aria-current="page"
+      className="header__menu-item header__menu-item--active"
+      href="/"
+      onClick={[Function]}
+      style={Object {}}
+    >
+      Карта
     </a>
   </nav>
   <div

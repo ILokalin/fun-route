@@ -66,10 +66,6 @@
                         "new-point"
                         "type-button"
                         "route";
-
-  @media (min-width: $screen-sd) {
-    
-  }
   
   @media (min-width: $screen-md) {
     grid-template-rows: 73px 1fr 56px;

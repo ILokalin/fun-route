@@ -23,12 +23,12 @@ export default class extends React.Component {
     const {title, image, text, id} = this.props.helpTopic;
 
     return (
-      <div className="help__card">
-        <h3 className="help__title">{title}</h3>
-        <div className="help__image-section">
-          <img className="help__image" src={image} alt={title} />
+      <div className="help-card">
+        <h3 className="help-card__title">{title}</h3>
+        <div className="help-card__image-section">
+          <img className="help-card__image" src={image} alt={title} />
         </div>
-        <p className="help__text" align="justify" key={id}>
+        <p className="help-card__text" align="justify" key={id}>
           {text.map((textNode, index) =>  <Fragment key={index}>
                                             {textNode}
                                           </Fragment>
