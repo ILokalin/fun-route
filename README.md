@@ -11,7 +11,7 @@
 Маршрут визуально представлен в двух вариантах: ломаная линия и мультимаршрут с расчетом расстояния и указания дорог для передвижения. 
 
 ### Демонстрация работы
-[На сайте: www.fun-route.lokalin.ru](https://fun-route.lokalin.ru)
+[На сайте: www.fun-route.lokalin.ru](https://fun-route.lokalin.ru)![Website](https://img.shields.io/website?up_message=online&url=https%3A%2F%2Ffun-route.lokalin.ru%2F)
 
 [Видео демонстрация](https://youtu.be/maRULCKDRGs)
 
@@ -58,7 +58,7 @@ ____
 | Test Suites | 11 passed | 11 total |
 |-------------|----------:|---------:|
 | Tests       | 12 passed | 12 total |
-| Snapshots   | **10 passed** |          |
+| Snapshots   | **10 passed** |  10 total   |
 
 Unit тесты расположены в папках __tests__`, у тестируемых модулей.
 Работа модуля `MapContainer` тестируется только функциональным тестом - предварительно необходимо запусить приложение на локальном сервере, по адресу: `http://localhost:3000`
