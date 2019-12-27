@@ -1,4 +1,8 @@
 # Интерактивный редактор маршрута #Fun-Route
+[![Travis][build-badge]][build]
+
+[build-badge]: https://img.shilds.io/travis/ILokalin/fun-route/master.png?style=flat-square
+[build]: https://travis-ci.com/ILokalin/fun-route.svg?branch=master
 Тестовый проект на React.js + Яндекс.Карты для составления и редактирования маршрута. 
 
 Позволяет задавать начальную, конечную и промежуточные точки маршрута, выбирая их на карте. Для каждой точки маршрута можно посмотреть ее адрес, координаты в градусах (широта, долгота), указать и получить собственное название.
