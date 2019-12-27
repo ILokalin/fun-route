@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - 9
+deploy:
+  provider: heroku
+  app: "fun-route"
+  api_key:
+    secure: "295ec89d-4305-40d2-aed4-22d8134bb184"
