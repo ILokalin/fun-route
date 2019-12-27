@@ -1,7 +1,7 @@
 # Интерактивный редактор маршрута #Fun-Route
 [![Build Status](https://travis-ci.com/ILokalin/fun-route.svg?branch=master)](https://travis-ci.com/ILokalin/fun-route)
 
-[![coveralls-status](https://coveralls.io/ILokalin/fun-route.svg?branch=master)](https://coveralls.io/ILokalin/fun-route)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ILokalin/fun-route)
 
 Тестовый проект на React.js + Яндекс.Карты для составления и редактирования маршрута. 
 
