@@ -9,9 +9,3 @@ install:
   # changes that would dirty the git workspace.
   - npm config set package-lock false
   - npm install
-  
-deploy:
-  provider: heroku
-  app: "fun-route"
-  api_key:
-    secure: "295ec89d-4305-40d2-aed4-22d8134bb184"
