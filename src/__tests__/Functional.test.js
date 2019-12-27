@@ -155,8 +155,4 @@ describe('Functional test', () => {
     await page.$$eval('button[value=remove]', el => el[0].click())
     await page.$$eval('button[value=remove]', el => el[0].click())
   }, 16000)
-
-
 });
-
-
