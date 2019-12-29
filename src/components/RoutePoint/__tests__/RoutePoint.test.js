@@ -25,14 +25,28 @@ const fakePoint = {
 
 describe('Route point create', () => {
   it('render snap', () => {
-    const component = rendrer.create(<RoutePoint  point={fakePoint}
-                                                  key={fakePoint.id}
-                                                  pointLetter={'A'}/>);
+    const mockCallback = jest.fn();
+    
+    const component = rendrer.create(<RoutePoint  point={ fakePoint }
+                                                  key={ fakePoint.id }
+                                                  pointLetter={ 'A' }
+                                                  newIndexFind = { mockCallback }
+                                                  />);
 
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
-
     })
 
+  it('render snap', () => {
+    const mockCallback = jest.fn();
+    
+    const component = rendrer.create(<RoutePoint  point={ fakePoint }
+                                                  key={ fakePoint.id }
+                                                  pointLetter={ 'A' }
+                                                  newIndexFind = { mockCallback }
+                                                  />);
 
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+    })
 })

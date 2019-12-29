@@ -2,7 +2,8 @@ sudo: false
 
 language: node_js
 node_js:
-  - 10
+  - "stable"
+script: npm run build
 
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js

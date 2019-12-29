@@ -62,7 +62,7 @@ export default class extends React.PureComponent {
                     name="address"
                     autoComplete="off"
                     onKeyDown={(e) => this.keyDown(e.key)}
-                    placeholder={placemarkAddress}
+                    placeholder={ placemarkAddress  }
                     />
             <h3 className="new-point__caption">Назовите новую точку</h3>
             <button className="new-point__add-button" type="button" disabled={ disabledValue } onClick={ this.handleAddPoint }>
