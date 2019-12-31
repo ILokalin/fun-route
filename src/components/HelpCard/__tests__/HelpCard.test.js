@@ -11,7 +11,7 @@ const fakeHelpTopic = {
   text: ['test text first', 'test text second']
 }
 
-describe('New point field Component create', () => {
+describe('unit', () => {
   
   it('render snap', () => {
     const component = rendrer.create(<HelpCard 

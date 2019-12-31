@@ -35,7 +35,7 @@ afterAll(() => {
 })
 
 
-describe('Functional test', () => {
+describe('E2E', () => {
   test('wait for hidden preloader', async () => {
     await page.waitForSelector('.map-region__map');
     await page.waitFor(3000);

@@ -5,7 +5,7 @@ import rendrer from 'react-test-renderer';
 import RouteContainer from 'components/RouteContainer';
 
 
-describe('RouteContainer Component', () => {
+describe('unit', () => {
   const routePoints = [{
     name: 'fake name for test',
     geometry: {

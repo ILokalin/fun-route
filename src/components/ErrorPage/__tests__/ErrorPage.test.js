@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import ErrorPage from 'components/ErrorPage';
 
 
-describe('ErrorPage Component', () => {
+describe('unit', () => {
   it('render snap', () => {
     const component = rendrer.create(
       <BrowserRouter>

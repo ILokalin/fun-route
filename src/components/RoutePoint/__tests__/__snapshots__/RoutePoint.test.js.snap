@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Route point create render snap 1`] = `
+exports[`unit render snap 1`] = `
 <li
   className="route__item"
   data-index="unique_line_1"
@@ -124,7 +124,7 @@ exports[`Route point create render snap 1`] = `
 </li>
 `;
 
-exports[`Route point create render snap 2`] = `
+exports[`unit render snap 2`] = `
 <li
   className="route__item"
   data-index="unique_line_1"

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ErrorPage Component render snap 1`] = `
+exports[`unit render snap 1`] = `
 <section
   className="error-page"
 >

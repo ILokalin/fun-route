@@ -11,7 +11,7 @@ const testPoint = {
   isLocationFound: false,
 }
 
-describe('New point field Component create', () => {
+describe('unit', () => {
   it('render snap when disabled', () => {
     const component = rendrer.create(<NewPoint
                                         currentCoords = {testPoint.currentCoords}
@@ -37,21 +37,5 @@ describe('New point field Component create', () => {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
     })
-
-  // it('render snap when enabled', () => {
-  //   testPoint.isLocationFound = true;
-  //   const mockCallback = jest.fn();
-
-  //   const wrapper = shallow(<NewPoint
-  //                             currentCoords = {testPoint.currentCoords}
-  //                             placemarkAddress  = {testPoint.placemarkAddress}
-  //                             onAddPoint = {mockCallback}
-  //                             isLocationFound = {testPoint.isLocationFound}
-  //                             />);
-
-  //   wrapper.find('new-point__add-button').at(0).simulate('click');
-  //   expect(mockCallback).toHaveBeenCalled();
-  //   })
-
 })
 

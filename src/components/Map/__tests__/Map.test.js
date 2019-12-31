@@ -6,7 +6,7 @@ import Map from 'components/Map';
 
 let isLocationFound = false;
 
-describe('Map Component', () => {
+describe('unit', () => {
   it('render snap with not found location', () => {
     const component = rendrer.create(<Map
                                       isLocationFound = {isLocationFound}

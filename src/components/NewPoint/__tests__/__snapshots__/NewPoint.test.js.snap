@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`New point field Component create render snap when disabled 1`] = `
+exports[`unit render snap when disabled 1`] = `
 <div
   className="new-point"
 >
@@ -53,7 +53,7 @@ exports[`New point field Component create render snap when disabled 1`] = `
 </div>
 `;
 
-exports[`New point field Component create render snap when enabled 1`] = `
+exports[`unit render snap when enabled 1`] = `
 <div
   className="new-point"
 >

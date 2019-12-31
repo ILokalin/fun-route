@@ -23,7 +23,7 @@ const fakePoint = {
     }
   }  
 
-describe('Route point create', () => {
+describe('unit', () => {
   it('render snap', () => {
     const mockCallback = jest.fn();
     

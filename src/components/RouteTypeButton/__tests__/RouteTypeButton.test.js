@@ -5,9 +5,7 @@ import rendrer from 'react-test-renderer';
 import RouteTypeButton from 'components/RouteTypeButton'
 
 
-describe('New point field Component create', () => {
-  
-
+describe('unit', () => {
   it('Route type button', () => {
     const component = rendrer.create(<RouteTypeButton />);
 

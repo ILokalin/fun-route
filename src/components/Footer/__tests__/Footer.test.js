@@ -5,7 +5,7 @@ import rendrer from 'react-test-renderer';
 import Footer from 'components/Footer';
 
 
-describe('Footer create', () => {
+describe('unit', () => {
   
   it('render snap', () => {
     const component = rendrer.create(<Footer />);

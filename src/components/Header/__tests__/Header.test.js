@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from 'components/Header';
 
 
-describe('Header component create', () => {
+describe('unit', () => {
   
   it('render snap', () => {
     const component = rendrer.create(

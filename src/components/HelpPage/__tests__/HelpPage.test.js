@@ -5,7 +5,7 @@ import rendrer from 'react-test-renderer';
 import HelpPage from 'components/HelpPage';
 
 
-describe('HelpPage Component', () => {
+describe('unit', () => {
   it('render snap', () => {
     const component = rendrer.create(<HelpPage />);
 

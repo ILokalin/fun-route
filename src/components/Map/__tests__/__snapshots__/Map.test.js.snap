@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Map Component render snap with found location 1`] = `
+exports[`unit render snap with found location 1`] = `
 <div
   className="map-region"
 >
@@ -11,7 +11,7 @@ exports[`Map Component render snap with found location 1`] = `
 </div>
 `;
 
-exports[`Map Component render snap with not found location 1`] = `
+exports[`unit render snap with not found location 1`] = `
 <div
   className="map-region"
 >

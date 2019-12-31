@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`New point field Component create Route type button 1`] = `
+exports[`unit Route type button 1`] = `
 <div
   className="route-type"
 >
