@@ -1,6 +1,5 @@
 # Интерактивный редактор маршрута #Fun-Route
 [![Build Status](https://travis-ci.com/ILokalin/fun-route.svg?branch=master)](https://travis-ci.com/ILokalin/fun-route)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ILokalin/fun-route)
 
 Тестовый проект на React.js + Яндекс.Карты для составления и редактирования маршрута. 
 
@@ -48,7 +47,7 @@ ____
 |             | unit | e2e |
 |-------------|:----:|:----------:|
 | Test Suites |  11  |      1     |
-| Tests       |  15  |     10     |
+| Tests       |  15  |     11     |
 | Snapshots   |  10  |            |
 
 ### Unit тестирование приложения
@@ -60,7 +59,7 @@ ____
 
 | Test Suites | 1 skipped  | 11 passed | 11 of 12 total |
 |-------------|----------:|----------:|---------:|
-| Tests       | 10 skipped | 15 passed | 25 total |
+| Tests       | 11 skipped | 15 passed | 26 total |
 | Snapshots   | **13 passed** |  13 total   | |
 
 
@@ -77,7 +76,7 @@ ____
 
 | Test Suites | 11 skipped | 1 passed | 1 of 12 total |
 |-------------|-----------:|---------:|--------------:|
-| Tests |  15 skipped | 10 passed | 25 total |
+| Tests |  15 skipped | 11 passed | 26 total |
 | Snapshots |  0 total | | |
 
 Тест проверяет:

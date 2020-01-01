@@ -153,5 +153,14 @@ describe('E2E', () => {
     await page.$$eval('button[value=remove]', el => el[0].click())
     await page.$$eval('button[value=remove]', el => el[0].click())
     await page.$$eval('button[value=remove]', el => el[0].click())
+
   }, 16000)
+
+  test('user mistake in link', async () => {
+    await page.goto('localhost:3000/g');
+    await page.waitForSelector('.error-page');
+
+    await page.click('.error-page__link');
+    await page.waitForSelector('.map-region__map')
+  })
 });
