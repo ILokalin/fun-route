@@ -5,10 +5,11 @@ import faker from 'faker';
 import puppeteer from 'puppeteer';
 
 
-let page;
-let browser;
-const width = 1920;
-const height = 1080;
+const width = 1920,
+      height = 1080;
+      
+let page,
+    browser;
 
 
 beforeAll(async () => {

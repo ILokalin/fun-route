@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
-import rendrer from 'react-test-renderer';
+import renderer from 'react-test-renderer';
 
 import Map from 'components/Map';
 
-let isLocationFound = false;
 
 describe('unit', () => {
+  let isLocationFound = false;
+  
   it('render snap with not found location', () => {
-    const component = rendrer.create(<Map
+    const component = renderer.create(<Map
                                       isLocationFound = {isLocationFound}
                                       />);
 
@@ -18,7 +19,7 @@ describe('unit', () => {
 
   it('render snap with found location', () => {
     isLocationFound = true;
-    const component = rendrer.create(<Map
+    const component = renderer.create(<Map
                                       isLocationFound = {isLocationFound}
                                       />);
 

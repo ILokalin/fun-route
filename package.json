@@ -21,11 +21,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test-all": "react-scripts test",
+    "test:all": "react-scripts test",
     "eject": "react-scripts eject",
-    "cover": "npm test -- --coverage --watchAll=false",
-    "e2e": "npm run test-all -- --t='E2E' --watchAll=false",
-    "test": "npm run test-all -- --t='unit' --watchAll=false"
+    "coverage": "npm test -- --coverage --watchAll=false",
+    "test:e2e": "npm run test:all -- --t='E2E' --watchAll=false",
+    "test": "npm run test:all -- --t='unit' --watchAll=false"
   },
   "eslintConfig": {
     "extends": "react-app"

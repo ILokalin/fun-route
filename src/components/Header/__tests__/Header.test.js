@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
-import rendrer from 'react-test-renderer';
+import renderer from 'react-test-renderer';
 
 import { BrowserRouter } from 'react-router-dom';
 import Header from 'components/Header';
@@ -9,7 +9,7 @@ import Header from 'components/Header';
 describe('unit', () => {
   
   it('render snap', () => {
-    const component = rendrer.create(
+    const component = renderer.create(
       <BrowserRouter>
         <Header />
       </BrowserRouter>

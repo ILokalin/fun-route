@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
-import rendrer from 'react-test-renderer';
+import renderer from 'react-test-renderer';
 
 import RoutePoint from 'components/RoutePoint';
 
-const fakePoint = {
+
+describe('unit', () => {
+  const fakePoint = {
     name: 'Start test',
     geometry: {
       id: 'unique_line_1',
@@ -22,12 +24,11 @@ const fakePoint = {
       }
     }
   }  
-
-describe('unit', () => {
+  
   it('render snap', () => {
     const mockCallback = jest.fn();
     
-    const component = rendrer.create(<RoutePoint  point={ fakePoint }
+    const component = renderer.create(<RoutePoint  point={ fakePoint }
                                                   key={ fakePoint.id }
                                                   pointLetter={ 'A' }
                                                   newIndexFind = { mockCallback }
@@ -40,7 +41,7 @@ describe('unit', () => {
   it('render snap', () => {
     const mockCallback = jest.fn();
     
-    const component = rendrer.create(<RoutePoint  point={ fakePoint }
+    const component = renderer.create(<RoutePoint  point={ fakePoint }
                                                   key={ fakePoint.id }
                                                   pointLetter={ 'A' }
                                                   newIndexFind = { mockCallback }

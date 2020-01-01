@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
-import rendrer from 'react-test-renderer';
+import renderer from 'react-test-renderer';
 
 import RouteContainer from 'components/RouteContainer';
 
@@ -44,7 +44,7 @@ describe('unit', () => {
   }]
 
   it('render snap', () => {
-    const component = rendrer.create(<RouteContainer  routePoints={routePoints} 
+    const component = renderer.create(<RouteContainer  routePoints={routePoints} 
                                                       />);
 
     const tree = component.toJSON();
