@@ -7,7 +7,6 @@ import Header from 'components/Header';
 
 
 describe('unit', () => {
-  
   it('render snap', () => {
     const component = renderer.create(
       <BrowserRouter>

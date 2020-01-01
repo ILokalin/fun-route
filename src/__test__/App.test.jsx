@@ -1,13 +1,11 @@
 import React from 'react';
-import ReactTestUtils from 'react-dom/test-utils';
-import rendrer from 'react-test-renderer';
 import faker from 'faker';
 import puppeteer from 'puppeteer';
 
 
 const width = 1920,
       height = 1080;
-      
+
 let page,
     browser;
 

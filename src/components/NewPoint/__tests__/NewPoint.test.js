@@ -39,4 +39,3 @@ describe('unit', () => {
     expect(tree).toMatchSnapshot();
     })
 })
-
