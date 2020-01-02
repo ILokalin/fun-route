@@ -18,7 +18,7 @@ export default class extends React.Component {
 
     return (
       <div className="map-region">
-        {!isLocationFound 
+        { !isLocationFound 
           ? <Fragment>
               <div className="map-region__map map-region__map--hidden" id="map"></div>
               <span className="map-region__preloader">

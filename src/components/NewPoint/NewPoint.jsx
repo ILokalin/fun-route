@@ -19,7 +19,6 @@ export default class extends React.PureComponent {
     currentCoords:    PropTypes.array
   }
 
-
   static defaultProps = {
     onAddPoint: () => false,
     isLocationFound: false,
@@ -48,7 +47,7 @@ export default class extends React.PureComponent {
 
   render () {
     const {placemarkAddress, currentCoords, isLocationFound} = this.props;
-    const hintString = `координаты: ${CoordsToString(currentCoords)}`;
+    const hintString = `координаты: ${ CoordsToString(currentCoords) }`;
     const disabledValue = isLocationFound ? '' : 'disabled'
 
     return (

@@ -6,13 +6,22 @@ import RouteTypeButton from 'components/RouteTypeButton';
 import PropTypes from 'prop-types';
 
 
+const ACTIVE_ELEMENT_COLOR = '#16A085',
+      LIGHT_ELEMENT_COLOR = '#798995',
+      ITEM_BG_COLOR = '#34495E',
+      INIT_MAP_ZOOM = 14,
+      INIT_MAP_COORDINATE = [55.72, 37.64],
+      YANDEX_MAP_ID = 'map',
+      SEARCH_PROVIDER   = { YANDEX: 'yandex#search' },
+      LOCATION_PROVIDER = { YANDEX: 'yandex' },
+      ROUTE_TYPE = {
+        POLYLINE: 'polyline',
+        MULTIROUTE: 'multiRoute'
+        };
+
 export default class extends React.PureComponent {
   constructor (props) {
     super(props);
-    
-    this.ActiveElementColor = '#16A085';
-    this.LightElementColor = '#798995';
-    this.ItemBgColor = '#34495E';
     
     this.onAddPoint = this.onAddPoint.bind(this);
     this.onDeletePoint = this.onDeletePoint.bind(this);
@@ -31,10 +40,10 @@ export default class extends React.PureComponent {
     newSession: true,
     mapState: {
       isLocationFound: false,
-      mapCenter: [55.72, 37.64],
-      mapZoom: 14,
+      mapCenter: INIT_MAP_COORDINATE,
+      mapZoom: INIT_MAP_ZOOM,
       routePointsArray: [],
-      currentPointCoords: [55.72, 37.64]
+      currentPointCoords: INIT_MAP_COORDINATE
     }
   }
 
@@ -47,7 +56,7 @@ export default class extends React.PureComponent {
 
 
   componentDidMount () {
-    const { newSession} = this.props
+    const { newSession } = this.props
 
     if (newSession) {
       window.addEventListener ('load', this.handleLoad());
@@ -58,8 +67,13 @@ export default class extends React.PureComponent {
 
 
   /**
-   * При смене страницы на /help, необходима отправка всех данных о текущем состоянии карты в App.js
-   * Координаты центральной точки, установленный zoom, положение основного маркера, вид пути и координаты точек
+   * При смене страницы на /help, необходима сохранить все данные о текущем состоянии карты.
+   * Сохраняеются:
+   * - mapCenter - {array} -координаты центральной точки
+   * - mapZoom - {number} - установленный пользователем zoom
+   * - currentPointCoords - {array} - координаты основного маркера
+   * - routePointsArray - {array} - массив с координатами точек, их именами и адресами
+   * - routeType - {string} - режим отображения маршрута
    */
   componentWillUnmount () {
     const { currentPoint, routePoints, isLocationFound, routeType } = this.state;
@@ -98,13 +112,14 @@ export default class extends React.PureComponent {
     const _this = this;
 
     window.ymaps.ready(() => {
-      this.funMap = new window.ymaps.Map('map', {
+      this.funMap = new window.ymaps.Map(YANDEX_MAP_ID, {
         center: mapState.mapCenter,
         zoom: mapState.mapZoom
       }, {
-        searchControlProvider: 'yandex#search'
+        searchControlProvider: SEARCH_PROVIDER.YANDEX
       });
 
+      // Коллекции для раздельного управления маркерами на карте
       this.currentPositionCollection = new window.ymaps.GeoObjectCollection();
       this.routeCollection = new window.ymaps.GeoObjectCollection();
 
@@ -124,7 +139,7 @@ export default class extends React.PureComponent {
          */
       if (newSession || !mapState.isLocationFound) {
         window.ymaps.geolocation.get({
-          provider: 'yandex',
+          provider: LOCATION_PROVIDER.YANDEX,
           mapStateAutoApply: true,
           timeout: 2000
           })
@@ -144,9 +159,6 @@ export default class extends React.PureComponent {
               isLocationFound: true
             })
           })
-          .catch((error) => {
-            console.log(`geoProblem ${error}`)
-          })
       } else {
         this.setState(
           state => ({
@@ -165,7 +177,7 @@ export default class extends React.PureComponent {
       this.funPolyline = new window.ymaps.Polyline(
         [],
         {}, {
-          strokeColor: [this.LightElementColor,this.ActiveElementColor],
+          strokeColor: [LIGHT_ELEMENT_COLOR,ACTIVE_ELEMENT_COLOR],
           strokeWidth: [6,4],
           editorMaxPoints: 0
         })
@@ -302,7 +314,7 @@ export default class extends React.PureComponent {
         balloonHeader: 'Расположение'
       },{
         preset: 'islands#icon',
-        iconColor: this.ActiveElementColor,
+        iconColor: ACTIVE_ELEMENT_COLOR,
         draggable: true,
         cursor: 'pointer',
         zIndex: 1000,
@@ -423,10 +435,10 @@ export default class extends React.PureComponent {
       {
         balloonHeader: 'Расположение',
         balloonContent: address,
-        iconContent: numOfPoint < 10 ? String.fromCharCode(numOfPoint + 65) : '',
+        iconContent: numOfPoint < 26 ? String.fromCharCode(numOfPoint + 65) : '',
       },{
         preset: 'islands#circleIcon',
-        iconColor: this.ItemBgColor,
+        iconColor: ITEM_BG_COLOR,
         draggable: true,
         cursor: 'pointer',
         hideIconOnBalloonOpen: false,
@@ -522,7 +534,7 @@ export default class extends React.PureComponent {
    * @name howRouteShow
    */
   howRouteShow () {
-    if (this.state.routeType === 'polyline') {
+    if (this.state.routeType === ROUTE_TYPE.POLYLINE) {
       const pointsForLine = this.state.routePoints.map(point => point.geometry.getCoordinates());
 
       this.funPolyline.geometry.setCoordinates(pointsForLine);
@@ -571,12 +583,12 @@ export default class extends React.PureComponent {
 
       const newRoute = this.state.routePoints.slice(0, index).concat(this.state.routePoints.slice(index + 1));
 
-      newRoute.forEach((placemark, i) => {
+      newRoute.forEach((placemark, numOfPoint) => {
         placemark.properties
             .set({
-              iconContent: i < 10 ? String.fromCharCode(i + 65) : ''
+              iconContent: numOfPoint < 26 ? String.fromCharCode(numOfPoint + 65) : ''
             });
-        placemark.geometry.num = i;
+        placemark.geometry.num = numOfPoint;
         this.routeCollection.add(placemark);
       });
 
@@ -616,12 +628,12 @@ export default class extends React.PureComponent {
 
       }
 
-      newRoute.forEach((placemark, i) => {
+      newRoute.forEach((placemark, numOfPoint) => {
         placemark.properties
             .set({
-              iconContent: i < 26 ? String.fromCharCode(i + 65) : ''
+              iconContent: numOfPoint < 26 ? String.fromCharCode(numOfPoint + 65) : ''
             });
-        placemark.geometry.num = i;
+        placemark.geometry.num = numOfPoint;
         this.routeCollection.add(placemark);
       });
 
@@ -646,7 +658,7 @@ export default class extends React.PureComponent {
     const index = this.state.routePoints.findIndex(point => point.geometry.id === id);
 
     this.funMap.panTo(
-            this.state.routePoints[index].geometry.getCoordinates(), {
+            this.state.routePoints[ index ].geometry.getCoordinates(), {
               flying: true,
             }
           );
@@ -661,8 +673,7 @@ export default class extends React.PureComponent {
    * @params {boolean} routeState - состояние переключателя маршрута
    */
   async onChangeRoutType (routeState) {
-    const {value} = routeState;
-    const routeType = value ? 'multiRoute' : 'polyline';
+    const routeType = routeState ? ROUTE_TYPE.MULTIROUTE : ROUTE_TYPE.POLYLINE;
 
     await this.setState({
       routeType: routeType

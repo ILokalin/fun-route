@@ -9,6 +9,9 @@ import HelpPage from 'components/HelpPage';
 import ErrorPage from 'components/ErrorPage';
 
 
+const INIT_MAP_ZOOM = 14,
+      INIT_MAP_COORDINATE = [55.72, 37.64]
+
 export default class extends React.Component {
   constructor () {
     super();
@@ -18,14 +21,15 @@ export default class extends React.Component {
     this.browserHistory = BrowserRouter.browserHistory;
   }
 
+
   state = {
     newSession: true,
     mapState: {
       isLocationFound: false,
-      mapCenter: [55.72, 37.64],
-      mapZoom: 14,
+      mapCenter: INIT_MAP_COORDINATE,
+      mapZoom: INIT_MAP_ZOOM,
       routePointsArray: [],
-      currentPointCoords: [55.72, 37.64]
+      currentPointCoords: INIT_MAP_COORDINATE
     }
   }
 

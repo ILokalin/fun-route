@@ -8,7 +8,6 @@ import IconRemove from 'components/IconsBtn/IconRemove';
 import IconUp from 'components/IconsBtn/IconUp';
 
 
-
 export default class extends React.PureComponent {
   constructor (props) {
     super(props);
@@ -18,13 +17,28 @@ export default class extends React.PureComponent {
 
 
   static routeType = {
-    newIndexFind: PropTypes.func.isRequired,
+    onChangeSequence: PropTypes.func.isRequired,
     point:        PropTypes.object.isRequired,
-    pointLetter:  PropTypes.string,
+    pointLetter:  PropTypes.string.isRequired,
   }
 
-  static propsDefault = { 
-    pointLetter: 'X'
+  static propsDefault = {
+    onChangeSequence: () => false,
+    point: {
+      name: '',
+      geometry: {
+        id: 'default-id',
+        getCoordinates: () => [0,0]
+      },
+      properties: {
+        get: (content) => {
+          if (content === 'balloonContent') {
+            return 'default Address';
+          }
+        }
+      }
+    },
+    pointLetter: '~'
   }
 
 
@@ -44,14 +58,11 @@ export default class extends React.PureComponent {
           targetHeight = parseInt(getComputedStyle(target).height),
           targetWidth  = parseInt(getComputedStyle(target).width);
 
-    // шаблон для вставки перенесенного элемента
+    // шаблон для подсветки предполагаемого размещения элемента
     const reservePositionForLanding = document.createElement('div');
     reservePositionForLanding.classList.add('route__item--landing-position');
-    reservePositionForLanding.style.height = '25px';
+    reservePositionForLanding.style.height = '61px';
     reservePositionForLanding.style.width = '100%';
-
-    let currentItemForLanding, 
-        coordsLandingList;
 
     // резервируется место для возврата элемента
     const reservePositionElement = document.createElement('div');
@@ -61,15 +72,29 @@ export default class extends React.PureComponent {
     const routeContainer = document.querySelector('.route');
     routeContainer.style.height = `${routeContainer.getBoundingClientRect().height}px`;
 
-    // Выбранный элемент необходимо перезакрепить на document
+    // Выбранный элемент необходимо перезакрепить на document.body, оформить и заменить подсветкой в списке
     target.style.borderRadius = '4px';
     target.style.position = 'absolute';
     target.style.width = targetWidth + 'px';
     target.style.zIndex = 10000;
+    target.style.boxShadow = '0px 11px 12px 0px rgba(50, 50, 50, 0.5)'
 
     document.body.append(target);
+    reservePositionElement.before(reservePositionForLanding);
 
-    const loadLandingList = () => {
+    // вспомогательные перменные для контроля размещения подсветки и хранения координат всех точек маршрута
+    let currentItemForLanding = null,
+        coordsLandingList = [],
+        isAboveContainer = true,
+        isOutOfContainerFix = false;
+
+    /**
+     * Создание списка с координатами всех точек маршрта оставшихся в списке и ссылками на них
+     * Требуется для сверки текущего положения перемещаемого элемента.
+     * @const
+     * @return coordsLandingList {array}
+     */
+    const createLandingList = () => {
       const itemsList = [...routeContainer.querySelectorAll('.route__item')];
 
       coordsLandingList = itemsList.map(item => {
@@ -81,12 +106,19 @@ export default class extends React.PureComponent {
         item: item,
         x: bound.left,
         y: bound.top,
-      }
-    })
+        }
+      })
+    }
+
+    // Восстановление стилей элемента и контейнера
+    const routeStyleReset = () => {
+      target.style = {};
+      routeContainer.style.height = '';
     }
 
     // корректировка текущего положения элемента относительно курсора 
     moveAt(event.pageX, event.pageY);
+
 
     /**
      * Запись координат для абсолютного позиционирования элемента на экране.
@@ -119,13 +151,13 @@ export default class extends React.PureComponent {
      * @params {event.object} event - событие с текущими координатами мыши
      */
     function onMouseMove(event) {
-      const {pageX, pageY, clientX, clientY } = event;
+      const { pageX, pageY, clientX, clientY } = event;
 
       moveAt(pageX, pageY);
 
-      loadLandingList();
+      createLandingList();
 
-      const checkCureentPosition = coordsLandingList.find(point => {
+      const checkCurrentPosition = coordsLandingList.find(point => {
         const top = point.y,
               left = point.x,
               bottom = point.y + point.height,
@@ -146,20 +178,25 @@ export default class extends React.PureComponent {
        *
        * Во время перетаскивания элемента отслеживается его положение над другими точками маршрута в списке. 
        * Разделяется несколько положений элемента:
-       * Элемент над списком и в верхней половине одной из точек - подсветить место вставки перед ней
-       * Элемент над списком и в нижней половине одной из точек - подсветить место вставик после нее
-       * 
-       * Элемент находится над подсветкой вставки - все остается без изменений
-       * Элемент не над списком и подсвечивтаь место вставки не надо - удаляется подсветка
+       * - элемент над списком, над одной из точек (был над ней или появился) - перед ней или после включается подсветка
+       * - элемент над контейнером И над подсветкой вставки - без изменений
+       * - элемент над контейнером И не над списком И не над подсветкой - убрать подсветку, вставка будет в хвост списка
+       * - элемент за пределами контейнера - подсветка в резерв для возврата элемента
        */
-      if (checkCureentPosition) {
-        const {y, height} = checkCureentPosition;
+      if (checkCurrentPosition) {
+        const {y, height} = checkCurrentPosition;
+
+        // если вернулись с элементом на список
+        if (!isAboveContainer) {
+          isAboveContainer = true;
+          isOutOfContainerFix = false;
+        }
 
         /**
          * Точка для посадки уже была выбрана && она прежняя - проверить расположение вставки, До или После точки
          * Если сменилась точка над которой элемент, то определяется и устанвливается вид вставки - До/После
          */
-        if (currentItemForLanding && checkCureentPosition.item.dataset.index === currentItemForLanding.dataset.index) {
+        if (currentItemForLanding && checkCurrentPosition.item.dataset.index === currentItemForLanding.dataset.index) {
           
           if (clientY > y + height / 2 && currentItemForLanding.position === 'before') {
 
@@ -172,7 +209,7 @@ export default class extends React.PureComponent {
 
           }
         } else {
-          currentItemForLanding = checkCureentPosition.item;
+          currentItemForLanding = checkCurrentPosition.item;
 
           if (clientY > y + height / 2) {
             currentItemForLanding.after(reservePositionForLanding);
@@ -184,22 +221,41 @@ export default class extends React.PureComponent {
 
           }
         }
-      } else if (!checkCureentPosition) {
-        if (currentItemForLanding) {
+      } else if (!checkCurrentPosition) {
+
+        // Проверить нахождение над контенером
+        {
+          const { top, left, bottom, right } = routeContainer.getBoundingClientRect();
+          
+          if ( clientY > top && clientY < bottom && clientX > left && clientX < right ) {
+            isAboveContainer = true;
+          } else {
+            isAboveContainer = false;
+          }
+        }
+
+        /**
+         * Проверка нахождения элемента:
+         * - за пределами контейнера со списком маршрута - подсветка на место, где элемент забрали
+         * - в пределах контейнера - значит вставка в хвост списка - убрать подсветку
+         */
+        if (isAboveContainer) {
           const {top, left, bottom, right } = reservePositionForLanding.getBoundingClientRect();
 
-          // Если НЕ над подсвеченным местом вставки - убрать подсветку 
-          if ( !((clientY + 2 >= top ) && (clientY - 2 <= bottom ) && clientX >= left && clientX <= right) ) {
-            reservePositionForLanding.remove();
-            currentItemForLanding = false;
-
-          } 
-        } else { 
-          reservePositionForLanding.remove();
-          currentItemForLanding = false;
-
-        }
-      }
+          if ( !(clientY + 2 >= top  && clientY - 2 <= bottom && clientX >= left && clientX <= right) ) {
+              reservePositionForLanding.remove();
+              currentItemForLanding = null;
+              isOutOfContainerFix = false;
+            } 
+          } else if (!isAboveContainer) {
+            if (!isOutOfContainerFix) {
+              reservePositionElement.before(reservePositionForLanding);
+              currentItemForLanding = null;
+              isOutOfContainerFix = true;
+            }
+          }
+      } 
+      
     }
 
 
@@ -216,69 +272,42 @@ export default class extends React.PureComponent {
      * @params  {object.event} event - событие мыши "кнопка отжата"
      */
     this.onMouseUp = (event) => {
-      target.style.top = '-500px';
-      const elementDropEnd = document.elementFromPoint(event.clientX, event.clientY);
-
       document.removeEventListener('mousemove', onMouseMove);
       target.removeEventListener('mouseup', this.onMouseUp);
 
-      target.style.width = '';
-      target.style.position = '';
-      target.style.zIndex = '';
-      target.style.top = '';
-      target.style.left = '';
-      target.style.borderRadius = '';
-      routeContainer.style.height = '';
+      reservePositionForLanding.remove();
+      reservePositionElement.before(target);
+      reservePositionElement.remove();
+      routeStyleReset();
 
+      const index = target.dataset.index
 
-      /** 
-       * Проверка позиции элемента в момент отжатия
-       * Ожидаемые варианты:
-       * Над точкой из списка - размесить переносимый элемент До или После точки
-       * Над контейнером для списка - разместить элемент в конце списка
-       * За пределами контейнера - вернуть элемент на прежнее место
-       */
       if (currentItemForLanding) {
-        if (currentItemForLanding.position === 'before') {
-          currentItemForLanding.before(target);
-        } else {
-          currentItemForLanding.after(target);
+        let newIndex = coordsLandingList.findIndex(element => element.item.dataset.index === currentItemForLanding.dataset.index);
+
+        if (currentItemForLanding.position === 'after') {
+          newIndex++;
         }
 
-        reservePositionElement.remove();
-        reservePositionForLanding.remove();
-        this.props.newIndexFind(target.dataset.index)
-      } else {
-        const inRouteContainer = elementDropEnd.closest('.route');
+        this.props.onChangeSequence(newIndex, index);
+      } else if (isAboveContainer) {
+        let newIndex = coordsLandingList.length;
 
-        if (inRouteContainer) {
-          inRouteContainer.append(target);
-          reservePositionElement.remove();
-          this.props.newIndexFind(target.dataset.index)
-
-        } else {
-          reservePositionElement.before(target);
-          reservePositionElement.remove();
-        }
+        this.props.onChangeSequence(newIndex, index);
       }
     }
 
     // При выходе мыши за пределы экрана возвращаем элемент в его прежнюю позицию, отменяем перетаскивание
     this.onMouseOut = (event) => {
       if (event.relatedTarget === null)  {
-        target.style.width = '';
-        target.style.position = '';
-        target.style.zIndex = '';
-        target.style.top = '';
-        target.style.left = '';
-        target.style.borderRadius = '';
-        routeContainer.style.height = '';
-
-        reservePositionElement.before(target);
-        reservePositionElement.remove()
-
         document.removeEventListener('mousemove', onMouseMove);
         target.removeEventListener('mouseup', this.onMouseUp);
+
+        reservePositionElement.before(target);
+        reservePositionElement.remove();
+        reservePositionForLanding.remove();
+
+        routeStyleReset();
       }
     }
 

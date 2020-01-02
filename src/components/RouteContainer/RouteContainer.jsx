@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import RoutePoint from 'components/RoutePoint';
 
 
-
 export default class extends React.PureComponent {
   constructor (props) {
     super(props);
 
     this.handlePoint = this.handlePoint.bind(this);
-    this.newIndexReady = this.newIndexReady.bind(this);
   }
 
 
@@ -20,7 +18,6 @@ export default class extends React.PureComponent {
     onChangeSequence: PropTypes.func.isRequired,
   }
   
-
   static defaultProps = {
     onDeletePoint: () => false,
     onViewPoint: () => false,
@@ -102,14 +99,14 @@ export default class extends React.PureComponent {
   }
 
 
-  /**
-   * После перемещения точки в маршруте, при готовности нового индекса, 
-   * вызов запроса на смену последовательности в соновном наборе данных
-   */
-  newIndexReady (id) {
-    const newIndex = this.positionIdInRoute(id)
-    this.props.onChangeSequence(newIndex, id);
-  }
+  // /**
+  //  * После перемещения точки в маршруте, при готовности нового индекса, 
+  //  * вызов запроса на смену последовательности в соновном наборе данных
+  //  */
+  // newIndexReady (id) {
+  //   const newIndex = this.positionIdInRoute(id)
+  //   this.props.onChangeSequence(newIndex, id);
+  // }
 
 
   render() {
@@ -118,10 +115,10 @@ export default class extends React.PureComponent {
     return (
       <ul className="route" onClick ={this.handlePoint}>
         {routePoints.map((point, index) =>  <RoutePoint   
-                                              point = {point}
-                                              key   = {point.geometry.id} 
-                                              pointLetter   = {index < 26 ? String.fromCharCode(index + 65) : ''}
-                                              newIndexFind  = {this.newIndexReady}
+                                              point = { point }
+                                              key   = { point.geometry.id } 
+                                              pointLetter   = { index < 26 ? String.fromCharCode(index + 65) : '' }
+                                              onChangeSequence = { this.props.onChangeSequence }
                                               />)}
       </ul>
     );
