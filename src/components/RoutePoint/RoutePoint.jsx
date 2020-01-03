@@ -281,11 +281,13 @@ export default class extends React.PureComponent {
      */
     this.onMouseUp = (event) => {
       document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseout', this.onMouseOut);
       target.removeEventListener('mouseup', this.onMouseUp);
 
       reservePositionForLanding.remove();
       reservePositionElement.before(target);
       reservePositionElement.remove();
+
       routeStyleReset();
 
       const index = target.dataset.index
@@ -307,8 +309,10 @@ export default class extends React.PureComponent {
 
     // При выходе мыши за пределы экрана возвращаем элемент в его прежнюю позицию, отменяем перетаскивание
     this.onMouseOut = (event) => {
+
       if (event.relatedTarget === null)  {
         document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseout', this.onMouseOut);
         target.removeEventListener('mouseup', this.onMouseUp);
 
         reservePositionElement.before(target);
