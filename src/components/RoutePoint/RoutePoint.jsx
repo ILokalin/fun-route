@@ -9,17 +9,18 @@ import IconUp from 'components/IconsBtn/IconUp';
 
 
 export default class extends React.PureComponent {
-  constructor (props) {
-    super(props);
-
-    this.onDragStart = this.onDragStart.bind(this);
-  }
-
 
   static routeType = {
-    onChangeSequence: PropTypes.func.isRequired,
-    point:        PropTypes.object.isRequired,
+    point:           PropTypes.shape({
+      name:           PropTypes.string.isRequired,
+      properties:     PropTypes.func.isRequired,
+      geometry:       PropTypes.shape({
+        id:             PropTypes.string.isRequired,
+        getCoordinates: PropTypes.func.isRequired
+      }).isRequired
+    }).isRequired,
     pointLetter:  PropTypes.string.isRequired,
+    onChangeSequence: PropTypes.func.isRequired,
   }
 
   static propsDefault = {
@@ -39,6 +40,13 @@ export default class extends React.PureComponent {
       }
     },
     pointLetter: '~'
+  }
+
+
+  constructor (props) {
+    super(props);
+
+    this.onDragStart = this.onDragStart.bind(this);
   }
 
 

@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+
 import Map from 'components/Map';
 import NewPoint from 'components/NewPoint';
 import RouteContainer from 'components/RouteContainer';
 import RouteTypeButton from 'components/RouteTypeButton';
-import PropTypes from 'prop-types';
+
 
 
 const ACTIVE_ELEMENT_COLOR = '#16A085',
@@ -19,22 +21,20 @@ const ACTIVE_ELEMENT_COLOR = '#16A085',
         MULTIROUTE: 'multiRoute'
         };
 
-export default class extends React.PureComponent {
-  constructor (props) {
-    super(props);
-    
-    this.onAddPoint = this.onAddPoint.bind(this);
-    this.onDeletePoint = this.onDeletePoint.bind(this);
-    this.onChangeSequence = this.onChangeSequence.bind(this);
-    this.onViewPoint = this.onViewPoint.bind(this);
-    this.onChangeRoutType = this.onChangeRoutType.bind(this);
-  }
+
+export default class extends React.Component {
 
   static propTypes = {
-    newSession:       PropTypes.bool.isRequired,
-    mapState:         PropTypes.object.isRequired,
+    newSession: PropTypes.bool.isRequired,
+    mapState:   PropTypes.shape({
+      isLocationFound:  PropTypes.bool.isRequired,
+      mapCenter:        PropTypes.arrayOf(PropTypes.number).isRequired,
+      mapZoom:          PropTypes.number.isRequired,
+      routPointsArray:  PropTypes.array,
+      currentPointCoords: PropTypes.array.isRequired
+    }),
     onChangePage:     PropTypes.func.isRequired
-  }
+  };
 
   static defaultProps = {
     newSession: true,
@@ -44,14 +44,26 @@ export default class extends React.PureComponent {
       mapZoom: INIT_MAP_ZOOM,
       routePointsArray: [],
       currentPointCoords: INIT_MAP_COORDINATE
-    }
-  }
+    },
+    onChangePage: () => false
+  };
 
-  state = {
+    state = {
     routePoints: [],
     currentPoint: {},
     isLocationFound: false,
     routeType: 'polyline'
+  };
+
+
+  constructor (props) {
+    super(props);
+    
+    this.onAddPoint = this.onAddPoint.bind(this);
+    this.onDeletePoint = this.onDeletePoint.bind(this);
+    this.onChangeSequence = this.onChangeSequence.bind(this);
+    this.onViewPoint = this.onViewPoint.bind(this);
+    this.onChangeRoutType = this.onChangeRoutType.bind(this);
   }
 
 

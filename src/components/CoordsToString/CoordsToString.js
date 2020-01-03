@@ -1,3 +1,9 @@
+/**
+ * Преобразование координат в строку
+ * @function
+ * @param {array} [lat, long] координаты точки (ширина, долгота)
+ * @return {string} строка в формате: "Градусы, минуты, секунды"
+ */
 export default function (coords) {
 
   const coordConvert = (coordinate) => {

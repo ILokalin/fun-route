@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import RoutePoint from 'components/RoutePoint';
 
 
-export default class extends React.PureComponent {
-  constructor (props) {
-    super(props);
-
-    this.handlePoint = this.handlePoint.bind(this);
-  }
-
+export default class extends React.Component {
 
   static propTypes = {
     routePoints:    PropTypes.array,
@@ -22,6 +17,13 @@ export default class extends React.PureComponent {
     onDeletePoint: () => false,
     onViewPoint: () => false,
     onChangeSequence: () => false,
+  }
+
+
+  constructor (props) {
+    super(props);
+
+    this.handlePoint = this.handlePoint.bind(this);
   }
 
 

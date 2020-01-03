@@ -1,16 +1,11 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
+
 import CoordsToString from 'components/CoordsToString';
 import IconAdd from 'components/IconsBtn/IconAdd';
 
 
-export default class extends React.PureComponent {
-  constructor (props) {
-    super(props);
-
-    this.handleAddPoint = this.handleAddPoint.bind(this);
-  }
-
+export default class extends React.Component {
 
   static propTypes = {
     onAddPoint:       PropTypes.func.isRequired,
@@ -24,6 +19,13 @@ export default class extends React.PureComponent {
     isLocationFound: false,
     currentCoords:    [0,0],
     placemarkAddress: ''
+  }
+
+
+  constructor (props) {
+    super(props);
+
+    this.handleAddPoint = this.handleAddPoint.bind(this);
   }
 
 

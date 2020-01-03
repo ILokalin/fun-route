@@ -1,28 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import IconRound from 'components/IconsBtn/IconRound';
 import IconRoute from 'components/IconsBtn/IconRoute';
 
 
-const ROUTE_TYPE = { POLYLINE: 'polyline' },
-      TEXT_POLYLINE_TYPE = 'Показать маршрут на карте',
-      TEXT_MULTIROUTE_TYPE = 'Вернуть режим редактирования';
+const ROUTE_TYPE = {
+        POLYLINE:   'polyline',
+        MULTIROUTE: 'multiRoute'
+        },
+      TEXT_POLYLINE_TYPE    = 'Показать маршрут на карте',
+      TEXT_MULTIROUTE_TYPE  = 'Вернуть режим редактирования';
 
 export default class extends React.PureComponent {
-  constructor (props) {
-    super(props);
-
-    this.changeRoutType = this.changeRoutType.bind(this);
-  }
 
   static propTypes = {
-    routeType: PropTypes.oneOf(['polyline', 'multiRoute']).isRequired,
+    routeType: PropTypes.oneOf([ROUTE_TYPE.POLYLINE, ROUTE_TYPE.MULTIROUTE]).isRequired,
     onChangeRoutType: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     routeType: ROUTE_TYPE.POLYLINE,
     onChangeRoutType: () => false,
+  }
+
+
+  constructor (props) {
+    super(props);
+
+    this.changeRoutType = this.changeRoutType.bind(this);
   }
 
 
