@@ -137,7 +137,7 @@ describe('E2E', () => {
   }, 16000)
 
 
-  test('user can  return to map page', async () => {
+  test('user can return to map page', async () => {
     await page.click('.header__logo');
 
     await page.waitForSelector('.map-region__map')
@@ -155,6 +155,7 @@ describe('E2E', () => {
     await page.$$eval('button[value=remove]', el => el[0].click())
 
   }, 16000)
+
 
   test('user mistake in link', async () => {
     await page.goto('localhost:3000/g');

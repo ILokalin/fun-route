@@ -8,9 +8,9 @@ import HelpCard from 'components/HelpCard';
 describe('unit', () => {
   const fakeHelpTopic = {
     id: 'test_id_0000',
-    title: 'test title',
-    image: '',
-    text: ['test text first', 'test text second']
+    helpTitle: 'test title',
+    helpPictureSrc: '',
+    helpText: ['test text first', 'test text second']
   }
   
   it('render snap', () => {

@@ -19,15 +19,14 @@ exports[`unit Route type button 1`] = `
   <h3
     className="route-type__caption"
   >
-    Вернуть режим редактирования
+    Показать маршрут на карте
   </h3>
   <label
     className="route-type__label"
-    htmlFor="type-toggle"
   >
     <input
+      checked={false}
       className="route-type__toggle"
-      id="type-toggle"
       name="routeType"
       onChange={[Function]}
       type="checkbox"

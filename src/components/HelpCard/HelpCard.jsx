@@ -29,7 +29,7 @@ export default class extends React.Component {
         <div className="help-card__image-section">
           <img className="help-card__image" src={ helpPictureSrc } alt={ helpTitle } />
         </div>
-        
+
         <p className="help-card__text" align="justify" key={ id }>
           {helpText.map((textFragment, index) =>  <Fragment key={index}>
                                                     {textFragment}
