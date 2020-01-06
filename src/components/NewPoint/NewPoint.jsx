@@ -28,11 +28,6 @@ export default class extends React.Component {
     this.handleAddPoint = this.handleAddPoint.bind(this);
   }
 
-
-  getInput = el => {
-    this.input = el;
-  }
-
   
   keyDown (keyPress) {
     if (keyPress === 'Enter') {
@@ -42,8 +37,8 @@ export default class extends React.Component {
 
 
   handleAddPoint () {
-    this.props.onAddPoint(this.input.value);
-    this.input.value = '';
+    this.props.onAddPoint(this.inputRef.value);
+    this.inputRef.value = '';
   }
 
 
@@ -59,10 +54,10 @@ export default class extends React.Component {
                     disabled={ disabledValue }
                     title="Добавьте точку в маршрут"
                     type="text"
-                    ref={ this.getInput }
+                    ref={(ref) => { this.inputRef = ref; }}
                     name="address"
                     autoComplete="off"
-                    onKeyDown={(e) => this.keyDown(e.key)}
+                    onKeyDown={ (e) => this.keyDown(e.key) }
                     placeholder={ placemarkAddress  }
                     />
             <h3 className="new-point__caption">Назовите новую точку</h3>

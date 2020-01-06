@@ -21,6 +21,7 @@ export default class extends React.PureComponent {
     }).isRequired,
     pointLetter:  PropTypes.string.isRequired,
     onChangeSequence: PropTypes.func.isRequired,
+    routeContainerRef: PropTypes.node.isRequired,
   }
 
   static propsDefault = {
@@ -39,7 +40,8 @@ export default class extends React.PureComponent {
         }
       }
     },
-    pointLetter: '~'
+    pointLetter: '~',
+    routeContainerRef: <did></did>
   }
 
 
@@ -77,8 +79,8 @@ export default class extends React.PureComponent {
     target.before(reservePositionElement);
 
     // Фиксируем высоту списка с элементами для избежания скачков
-    const routeContainer = document.querySelector('.route');
-    routeContainer.style.height = `${routeContainer.getBoundingClientRect().height}px`;
+    const routeContainer = this.props.routeContainerRef;
+    routeContainer.style.height = `${ routeContainer.getBoundingClientRect().height }px`;
 
     // Выбранный элемент необходимо перезакрепить на document.body, оформить и заменить подсветкой в списке
     target.style.borderRadius = '4px';

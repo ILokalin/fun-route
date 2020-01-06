@@ -101,24 +101,17 @@ export default class extends React.Component {
   }
 
 
-  // /**
-  //  * После перемещения точки в маршруте, при готовности нового индекса, 
-  //  * вызов запроса на смену последовательности в соновном наборе данных
-  //  */
-  // newIndexReady (id) {
-  //   const newIndex = this.positionIdInRoute(id)
-  //   this.props.onChangeSequence(newIndex, id);
-  // }
-
-
   render() {
     const {routePoints} = this.props;
 
     return (
-      <ul className="route" onClick ={this.handlePoint}>
+      <ul className="route"
+          onClick ={ this.handlePoint }
+          ref = { (ref) => { this.routeContainerRef = ref; }}>
         {routePoints.map((point, index) =>  <RoutePoint   
                                               point = { point }
                                               key   = { point.geometry.id } 
+                                              routeContainerRef = { this.routeContainerRef }
                                               pointLetter   = { index < 26 ? String.fromCharCode(index + 65) : '' }
                                               onChangeSequence = { this.props.onChangeSequence }
                                               />)}
