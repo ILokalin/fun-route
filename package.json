@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.1.2",
     "pretty": "^2.0.0",
     "prop-types": "^15.7.2",
+    "cz-customizable": "^6.2.0",
     "puppeteer-io": "^1.12.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -26,6 +27,14 @@
     "coverage": "npm test -- --coverage --watchAll=false",
     "test:e2e": "npm run test:all -- --t='E2E' --watchAll=false",
     "test": "npm run test:all -- --t='unit' --watchAll=false"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "config/git/commitizen.js"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
