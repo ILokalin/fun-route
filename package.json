@@ -26,7 +26,7 @@
     "eject": "react-scripts eject",
     "coverage": "npm test -- --coverage --watchAll=false",
     "test:e2e": "npm run test:all -- --t='E2E' --watchAll=false",
-    "test": "npm run test:all -- --t='unit' --watchAll=false"
+    "test": "npm run test:all -- --t='unit' --watchAll=false --reporters jest-silent-reporter"
   },
   "config": {
     "commitizen": {
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "faker": "^4.1.0",
+    "jest-silent-reporter": "^0.2.1",
     "puppeteer": "^2.0.0"
   }
 }
